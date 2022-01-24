@@ -20,16 +20,16 @@ using SpreadsheetLight;
 using Telerik.Web.UI;
 using CyberBalance.VB.Core; 
 namespace CyberScope.CS.Lab 
-{ 
-    public class MultiAnswerGrid : RadGrid
+{
+    public class CBMultiAnswerGrid : RadGrid
     {
         #region CTOR 
         protected CAuser _CAUser;
         protected URLParms _UrlParams;
-        public MultiAnswerGrid()
+        public CBMultiAnswerGrid()
         {
             CBWebBase.Init(ref _CAUser, ref _UrlParams);
-            this.CssClass += " _MultiAnswerGrid_ ";
+            this.CssClass += " CBMultiAnswerGrid ";
         }
         #endregion
 
@@ -37,11 +37,10 @@ namespace CyberScope.CS.Lab
         private DataTable dataTable { get; set; } = new DataTable();
         private string PK_Question { get; set; }
         public string PK_QuestionGroup { get; set; }
-        public string ColumnCaptionPKs { get; set; }
+        public string ColumnQuestionPKs { get; set; }
         public string RowCaptionField { get; set; } = "CAPTION";
         public string CaptionFieldHeaderText { get; set; } = "Metric";
-        public string Fields { get; set; }
-        public string StoredProcedure { get; set; }  
+        public string StoredProcedure { get; set; }
         public bool IsPostBack { get; set; } = false;
         private string _userid;
         public string UserId
@@ -55,15 +54,18 @@ namespace CyberScope.CS.Lab
             get { return _PK_OrgSubmission ?? _UrlParams.GetParm("PK_OrgSubmission"); }
             set { _PK_OrgSubmission = value; }
         }
-        private List<string> _colNames = new List<string>(); 
+        private string[] _AnswerFields => Regex.Replace(AnswerFields ?? "", @"\s", "")?.Split(',');
+        public string AnswerFields { get; set; }
+        private List<string> _colNames = new List<string>();
         public List<string> ColNames
         {
-            get {
-                if (_colNames.Count < 1) 
-                     getColNamesFromPKQuestions(); 
-                return _colNames; 
-            } 
-        } 
+            get
+            {
+                if (_colNames.Count < 1)
+                    PopulateColNamesFromPKQuestions();
+                return _colNames;
+            }
+        }
         #endregion
 
         #region ItemTemplates
@@ -117,19 +119,18 @@ namespace CyberScope.CS.Lab
                 Label txt = (Label)sender;
                 GridDataItem container = (GridDataItem)txt.NamingContainer;
                 txt.Text = ((DataRowView)container.DataItem)[this.id].ToString();
-            } 
+            }
         }
         #endregion
 
         #region EVENTS 
         public class ValidatingEventArgs : EventArgs
         {
-            public bool IsValid { get; set; } = false;
+            public bool IsValid { get; set; } = true;
             public GridCommandEventArgs GridCommandEventArgs { get; set; }
             public GridItem GridItem => GridCommandEventArgs?.Item;
             public ValidatingEventArgs()
             {
-                this.IsValid = false;
             }
             public Control this[string ControlName] => GridItem?.FindControl(ControlName);
         }
@@ -162,55 +163,56 @@ namespace CyberScope.CS.Lab
         }
 
         #endregion
-         
+
         #region METHODS
-         
+
         protected override void OnInit(EventArgs e)
-        {  
+        {
             this.MasterTableView.AutoGenerateColumns = false;
-            this.NeedDataSource += this.OnNeedDataSource; 
+            this.NeedDataSource += this.OnNeedDataSource;
             this.ItemDataBound += this.OnItemDataBound;
             this.ItemCommand += this.OnItemCommand;
             this.MasterTableView.CommandItemDisplay = GridCommandItemDisplay.None;
+            this.MasterTableView.EditMode = GridEditMode.InPlace;
+            this.MasterTableView.CommandItemDisplay = GridCommandItemDisplay.None;
 
-            var gecc = new GridEditCommandColumn();
-            gecc.UniqueName = "EditCommandColumn";
-            this.MasterTableView.Columns.Add(gecc);
-
-            var bc = new GridBoundColumn();
-            bc.DataField = this.RowCaptionField;
-            bc.HeaderText = this.CaptionFieldHeaderText;
-            bc.ReadOnly = true;
-            this.MasterTableView.Columns.Add(bc);
-
-            if (!string.IsNullOrEmpty(Fields))
+            if (!string.IsNullOrEmpty(AnswerFields))
             {
-                var _fields = Regex.Replace(Fields, @"\s", "").Split(',');
-                for (int i = 0; i < _fields.Count(); i++)
-                {  
+                var gecc = new GridEditCommandColumn();
+                gecc.UniqueName = "EditCommandColumn";
+                this.MasterTableView.Columns.Add(gecc);
+
+                var bc = new GridBoundColumn();
+                bc.DataField = this.RowCaptionField;
+                bc.HeaderText = this.CaptionFieldHeaderText;
+                bc.ReadOnly = true;
+                this.MasterTableView.Columns.Add(bc);
+
+                for (int i = 0; i < _AnswerFields.Count(); i++)
+                {
                     GridTemplateColumn gtc = new GridTemplateColumn();
-                    gtc.UniqueName = _fields[i];
-                    gtc.ItemTemplate = new cItemTemplate(_fields[i]);
-                    gtc.EditItemTemplate = new cEditTemplate(_fields[i]);
-                    gtc.HeaderText = (ColNames.Count > i) ? ColNames[i] : _fields[i];
+                    gtc.UniqueName = _AnswerFields[i];
+                    gtc.ItemTemplate = new cItemTemplate(_AnswerFields[i]);
+                    gtc.EditItemTemplate = new cEditTemplate(_AnswerFields[i]);
+                    gtc.HeaderText = (ColNames.Count > i) ? ColNames[i] : _AnswerFields[i];
                     this.MasterTableView.Columns.Add(gtc);
-                } 
-            } 
-            this.MasterTableView.EditMode = GridEditMode.InPlace; 
-            this.MasterTableView.CommandItemDisplay = GridCommandItemDisplay.None; 
-            base.OnInit(e); 
-        }  
+                }
+            }
+            base.OnInit(e);
+        }
         protected override void OnLoad(EventArgs e)
-        { 
-            base.OnLoad(e); 
-        }   
+        {
+
+
+            base.OnLoad(e);
+        }
         protected void OnItemDataBound(object source, Telerik.Web.UI.GridItemEventArgs e)
         {
-            DataRowView _DataRowView; 
+            DataRowView _DataRowView;
             if (e.Item.ItemType == GridItemType.EditItem && e.Item.IsInEditMode)
             {
                 if (!(e.Item is GridEditFormInsertItem || e.Item is GridDataInsertItem))
-                { 
+                {
                     _DataRowView = (DataRowView)e.Item.DataItem;
                     int colCount = _DataRowView.Row.Table.Columns.Count;
                     for (int i = 0; i < colCount; i++)
@@ -221,8 +223,8 @@ namespace CyberScope.CS.Lab
                         SetControlValue(ref control, val);
                     }
                 }
-            } 
-        } 
+            }
+        }
         protected void OnNeedDataSource(object source, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["CAClientConnectionString"].ConnectionString);
@@ -235,7 +237,7 @@ namespace CyberScope.CS.Lab
             if (!string.IsNullOrEmpty(this.PK_QuestionGroup))
             {
                 cmd.Parameters.AddWithValue("@PK_QuestionGroup", this.PK_QuestionGroup);
-            } 
+            }
             cmd.Parameters.AddWithValue("@MODE", "SELECT");
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             dataTable = new DataTable();
@@ -248,7 +250,7 @@ namespace CyberScope.CS.Lab
                 conn.Close();
             }
             this.DataSource = dataTable;
-        } 
+        }
         protected void OnItemCommand(object source, GridCommandEventArgs e)
         {
             if (Regex.IsMatch(e.CommandName, $"Update"))
@@ -267,7 +269,7 @@ namespace CyberScope.CS.Lab
 
         protected void UpdateRecord(object source, GridCommandEventArgs e)
         {
-            string command = e.CommandName; 
+            string command = e.CommandName;
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = this.StoredProcedure;
@@ -279,13 +281,13 @@ namespace CyberScope.CS.Lab
                 if (!DataKey.Contains("PK_OrgSubmission"))
                 {
                     var val = ((GridDataItem)e.Item).GetDataKeyValue(DataKey)?.ToString();
-                    if (!string.IsNullOrEmpty(val)) 
-                        cmd.Parameters.AddWithValue($"@{DataKey}", val); 
-                } 
-            }  
+                    if (!string.IsNullOrEmpty(val))
+                        cmd.Parameters.AddWithValue($"@{DataKey}", val);
+                }
+            }
             cmd.Parameters.Add("@OUT", SqlDbType.Int);
             cmd.Parameters["@OUT"].Direction = ParameterDirection.Output;
-       
+
             var args = new RecordUpdatingEventArgs(cmd, e);
             ParamPopulator(ref cmd, e);
             RecordUpdating(args);
@@ -300,7 +302,7 @@ namespace CyberScope.CS.Lab
             this.Rebind();
         }
 
-        private void getColNamesFromPKQuestions()
+        private void PopulateColNamesFromPKQuestions()
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["CAClientConnectionString"].ConnectionString);
             conn.Open();
@@ -308,9 +310,9 @@ namespace CyberScope.CS.Lab
             cmd.Connection = conn;
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = this.StoredProcedure;
-            if (!string.IsNullOrEmpty(this.ColumnCaptionPKs))
+            if (!string.IsNullOrEmpty(this.ColumnQuestionPKs))
             {
-                cmd.Parameters.AddWithValue("@ColumnCaptionPKs", this.ColumnCaptionPKs);
+                cmd.Parameters.AddWithValue("@ColumnCaptionPKs", this.ColumnQuestionPKs);
             }
             cmd.Parameters.AddWithValue("@MODE", "SELECT_LABELS");
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
@@ -340,8 +342,8 @@ namespace CyberScope.CS.Lab
                     if (ct == typeof(RadDropDownList))
                     {
                         DropDownListItem item = ((RadDropDownList)control).FindItemByValue(Convert.ToString(val));
-                        if (item != null) 
-                            item.Selected = true; 
+                        if (item != null)
+                            item.Selected = true;
                     }
                     else if (ct == typeof(RadComboBox))
                     {
@@ -389,7 +391,7 @@ namespace CyberScope.CS.Lab
             if (GridItemType.EditItem == e.Item.ItemType)
             {
                 colCount = ((GridDataItem)e.Item).OwnerTableView.Columns.Count;
-            } 
+            }
             for (int i = 0; i < colCount; i++)
             {
                 var col = ((GridDataItem)e.Item).OwnerTableView.Columns[i];
@@ -414,8 +416,6 @@ namespace CyberScope.CS.Lab
                 }
             }
         } 
-       
-
         #endregion
     }
 }

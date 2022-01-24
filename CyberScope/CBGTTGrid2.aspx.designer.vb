@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class _CBGTTGrid
+Partial Public Class _CBGTTGrid2
 
     '''<summary>
     '''bl_Errors control.
@@ -29,5 +29,5 @@ Partial Public Class _CBGTTGrid
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents MainGrid As Global.CyberScope.CS.Lab.MultiAnswerGrid
+    Protected WithEvents MainGrid As Global.CyberBalance.CS.Web.UI.CBDataGrid
 End Class

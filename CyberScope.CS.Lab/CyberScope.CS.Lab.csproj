@@ -67,12 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="CustomControls\MultiAnswerGrid.cs" />
-    <Compile Include="CustomControls\CSServiceGrid.cs" />
+    <Compile Include="CustomControls\CBCommandItemGrid.cs" />
+    <Compile Include="CustomControls\CBGrid.cs" />
+    <Compile Include="CustomControls\CBMultiAnswerGrid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Script.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\CyberBalance\trunk\projects\CyberBalance.CS.Core\CyberBalance.CS.Core.csproj">
@@ -95,6 +93,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

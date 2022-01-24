@@ -7,5 +7,7 @@ Public Class Global_asax
         ' Fires when the application is started
         RouteConfig.RegisterRoutes(RouteTable.Routes)
         BundleConfig.RegisterBundles(BundleTable.Bundles)
+        'WebApiConfig.Register(Http.GlobalConfiguration.Configuration)
+        Http.GlobalConfiguration.Configure(AddressOf WebApiConfig.Register)
     End Sub
 End Class

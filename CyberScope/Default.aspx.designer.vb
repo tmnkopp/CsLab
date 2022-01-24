@@ -14,20 +14,11 @@ Option Explicit On
 Partial Public Class _Default
 
     '''<summary>
-    '''rbtnDownload control.
+    '''CBGrid control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rbtnDownload As Global.Telerik.Web.UI.RadButton
-
-    '''<summary>
-    '''EinsteinDataImporter control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents EinsteinDataImporter As Global.CyberBalance.CS.Web.UI.EinsteinDataImporter
+    Protected WithEvents CBGrid As Global.CyberScope.CS.Lab.CBGrid
 End Class

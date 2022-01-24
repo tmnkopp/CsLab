@@ -1,3 +1,10 @@
+CyberScope.CS.Lab.CBGrid, CyberScope.CS.Lab, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+Telerik.Web.UI.RadDatePicker, Telerik.Web.UI, Version=2021.3.1111.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadButton, Telerik.Web.UI, Version=2021.3.1111.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadNumericTextBox, Telerik.Web.UI, Version=2021.3.1111.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadComboBox, Telerik.Web.UI, Version=2021.3.1111.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
+Telerik.Web.UI.RadCheckBox, Telerik.Web.UI, Version=2021.3.1111.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4 
+Telerik.Web.UI.RadTextBox, Telerik.Web.UI, Version=2021.3.1111.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
 Telerik.Web.UI.RadDropDownList, Telerik.Web.UI, Version=2021.1.330.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
 Telerik.Web.UI.RadButton, Telerik.Web.UI, Version=2021.1.330.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4
 Telerik.Web.UI.RadGrid, Telerik.Web.UI, Version=2021.1.330.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4

@@ -11,5 +11,14 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class About
+Partial Public Class CBGrid
+
+    '''<summary>
+    '''CBGrid control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents CBGrid As Global.CyberScope.CS.Lab.CBGrid
 End Class
