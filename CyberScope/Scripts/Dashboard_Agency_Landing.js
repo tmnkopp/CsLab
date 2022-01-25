@@ -11,16 +11,16 @@
         }
     } 
     RequestDataTable( request, (response) => {
-        $("#payload").val(response.d);
+        $("#_json_cache").val(response.d);
         Render();
     }); 
 });
-const Render = () => {
-    const response_json = $("#payload").val();
+const Render = () => { 
+    const response_json = $("#_json_cache").val();
     const response_data = JSON.parse(response_json);
     const fy_filter_val = $("#fy_filter").val();
-  
-    const ycoords = response_data.filter(i => i.Year == fy_filter_val).reduce((result, item) => {
+    
+    const quart_data = response_data.filter(i => i.Year == fy_filter_val).reduce((result, item) => {
         if (!result[item.ScheduledActivationQuarter]) {
             result[item.ScheduledActivationQuarter] = { OT: 0, OD: 0 };
         } 
@@ -29,10 +29,10 @@ const Render = () => {
         return result;
     }, {});
     
-    Object.keys(ycoords).forEach(quart => {
+    Object.keys(quart_data).forEach(quart => {
         let trace1 = {
             type: 'bar',  marker: { color: ['rgb(100,143,255)', 'rgb(195, 215, 255)', 'rgb(182, 182, 182)'] },
-            y: [ycoords[quart].OT, ycoords[quart].OD, ycoords[quart].OT + ycoords[quart].OD],
+            y: [quart_data[quart].OT, quart_data[quart].OD, quart_data[quart].OT + quart_data[quart].OD],
             x: ['ONTIME', 'OVERDUE', 'TOTAL'] 
         };
         let layout = {
