@@ -1,96 +1,70 @@
 ﻿
-$(document).ready(function () {
-    d3.select('#filter').on('change', Render);
-    $(function () {
+$(document).ready(function () { 
+    for (var i = 2022; i > 2012; i--) {
+        $("#fy_filter").append(`<option value=${i}>${i}</option>`); 
+    }
+    $("#fy_filter").val('2021');
+    $("#fy_filter").change(() => {
+        Render();
+    });
+
+    $(() => {
         var request = {};
-        request['SPROC'] = "CISA_CVE_CRUD";
-        request['MODE'] = "SELECT";
+        request['SPROC'] = "DashAgency";
+        request['MODE'] = "SELECT"; 
         var json = JSON.stringify({ request: request });
         $.ajax({
-            url: "Landing.aspx/RequestSubmissionHist",
+            url: "Landing.aspx/RequestDataTable",
             type: "POST", 
             data: json,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: OnSuccess,
-            failure: function (response) {
+            failure: (response) => {
                 console.log(response.d);
             },
-            error: function (response) {
+            error: (response) => {
                 console.log(response.d);
             }
         });
     });
     function OnSuccess(response) {
-        var data = response.d;
-        d3.select('#payload').attr('value', data);
+        var data = response.d; 
+        $("#payload").val(data);
         Render();
     } 
     function Render() {
-        var data = d3.select('#payload').property('value');
-        let obj = JSON.parse(data);
-        let filter = d3.select('#filter').property('value'); 
- 
-        let group = obj.reduce(function (result, item) {
-            if (!result[item.Vendor]) {
-                result[item.Vendor]=1;
-            } else {
-                result[item.Vendor]++;
-            }
+        const response_data = $("#payload").val();
+        const response_obj = JSON.parse(response_data); 
+        const fy_filter_val = $("#fy_filter").val(); 
+        const fyears = response_obj.reduce((result, item) => {
+            if (!result[item.Year]) {
+                result[item.Year] = [];
+            } 
+            result[item.Year].push(item);
             return result;
-        }, {});
-         
-        if (isNumeric(filter)) { 
-            Object.entries(group).forEach(([key, value]) => {
-                if (value < parseInt(filter)) {
-                    delete group[key];
-                }
-            });
-        }
+        },{});
+    
+        let quart_data = { 1: { OT: 0, OD: 0 }, 2: { OT: 0, OD: 0 }, 3: { OT: 0, OD: 0 }, 4: { OT: 0, OD: 0 } };
+        const ycoords = fyears[fy_filter_val].reduce((result, item) => {
+            result[item.ScheduledActivationQuarter].OT += item.ONTIME;
+            result[item.ScheduledActivationQuarter].OD += item.OVERDUE;
+            return result;
+        }, quart_data);
 
-        var trace1 = {
-            x: Object.keys(group),
-            y: Object.values(group),
-            type: 'bar', marker: { color: 'rgb(100,143,255)', opacity: 1, }
-        };
-        var data = [trace1];
-        Plotly.newPlot('plot', data);
-
-        var trace1 = {
-            x: ['foo', 'bar', 'qux'],
-            y: [20, 14, 23],
-            name: 'Foo',
-            type: 'bar', marker: { color: 'rgb(195,215,255)', opacity: 1, }
-        }; 
-        var trace2 = {
-            x: ['foo', 'bar', 'qux'],
-            y: [12, 18, 29],
-            name: 'Bar',
-            type: 'bar', marker: { color: 'rgb(100,143,255)', opacity: 1, }
-        };
-
-        var data = [trace1, trace2];
-        var layout = { barmode: 'stack' };
-        Plotly.newPlot('plot2', data, layout);
-        Plotly.newPlot('plot3', data, layout);
-
-        var trace1 = {
-            type: 'bar', marker: {
-                color: ['rgb(100,143,255)', 'rgb(195, 215, 255)', 'rgb(182, 182, 182)'], opacity: 1, },
-            x: [20, 14, 23],
-            y: ['foo', 'bar', 'qux'],
-            orientation: 'h'
-        };
-
-        var data = [trace1];
-        Plotly.newPlot('plot4', data);
-        Plotly.newPlot('plot5', data);
-        Plotly.newPlot('plot6', data);
-        Plotly.newPlot('plot7', data);
-
-    } 
-    function isNumeric(value) {
-        return /^-?\d+$/.test(value);
-    }
+        Object.keys(quart_data).forEach(quart => { 
+            let trace1 = {
+                type: 'bar',
+                marker: { color: ['rgb(100,143,255)', 'rgb(195, 215, 255)', 'rgb(182, 182, 182)'], opacity: 1, },
+                y: [ycoords[quart].OT, ycoords[quart].OD, ycoords[quart].OT + ycoords[quart].OD],
+                x: ['ONTIME', 'OVERDUE', 'TOTAL'],
+                width: [.9, .9, .9]
+            };
+            let layout = {
+                title: `${fy_filter_val} Q${quart}`,  height: 320
+            }; 
+            Plotly.newPlot(`plotq${quart}`, [trace1], layout, { displayModeBar: false });
+        }); 
+    }  
 });
  
