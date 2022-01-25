@@ -13,8 +13,7 @@
     RequestDataTable( request, (response) => {
         $("#payload").val(response.d);
         Render();
-    });
- 
+    }); 
 });
 const Render = () => {
     const response_json = $("#payload").val();
@@ -33,7 +32,7 @@ const Render = () => {
     Object.keys(quart_data).forEach(quart => {
         let trace1 = {
             type: 'bar',
-            marker: { color: ['rgb(100,143,255)', 'rgb(195, 215, 255)', 'rgb(182, 182, 182)'], opacity: 1, },
+            marker: { color: ['rgb(100,143,255)', 'rgb(195, 215, 255)', 'rgb(182, 182, 182)']},
             y: [ycoords[quart].OT, ycoords[quart].OD, ycoords[quart].OT + ycoords[quart].OD],
             x: ['ONTIME', 'OVERDUE', 'TOTAL'],
             width: [.9, .9, .9]
@@ -46,7 +45,7 @@ const Render = () => {
 }
 
 const RequestDataTable = (request, successFn, webservice ='RequestDataTable') => {
-    var json = JSON.stringify({ request: request });
+    const json = JSON.stringify({ request: request });
     $.ajax({
         url: `Landing.aspx/${webservice}`,
         type: "POST",
