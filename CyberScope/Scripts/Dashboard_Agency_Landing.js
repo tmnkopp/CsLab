@@ -1,4 +1,4 @@
-﻿$(document).ready(function () { 
+﻿$(document).ready(() => { 
     for (var i = 2022; i > 2012; i--) {
         $("#fy_filter").append(`<option value=${i}>${i}</option>`); 
     }
@@ -6,28 +6,31 @@
     $("#fy_filter").change(() => {
         Render();
     });
-
-    let request = {};
-    request['SPROC'] = "DashAgency";
-    request['MODE'] = "SELECT";
-    MakeRequest(request, OnSuccess);
-   
+    let request = {
+        SPROC: "DashAgency",
+        PARMS: {
+            MODE: "SELECT" 
+        }
+    } 
+    RequestDataTable(request, (response) => { 
+        $("#payload").val(response.d);
+        Render();
+    }); 
 });
-
-function Render() {
+const Render = () => {
     const response_data = $("#payload").val();
     const response_obj = JSON.parse(response_data);
     const fy_filter_val = $("#fy_filter").val();
-    const fyears = response_obj.reduce((result, item) => {
+    const fy_data = response_obj.reduce((result, item) => {
         if (!result[item.Year]) {
             result[item.Year] = [];
         }
         result[item.Year].push(item);
         return result;
     }, {});
-
+  
     let quart_data = { 1: { OT: 0, OD: 0 }, 2: { OT: 0, OD: 0 }, 3: { OT: 0, OD: 0 }, 4: { OT: 0, OD: 0 } };
-    const ycoords = fyears[fy_filter_val].reduce((result, item) => {
+    const ycoords = fy_data[fy_filter_val].reduce((result, item) => {
         result[item.ScheduledActivationQuarter].OT += item.ONTIME;
         result[item.ScheduledActivationQuarter].OD += item.OVERDUE;
         return result;
@@ -47,7 +50,8 @@ function Render() {
         Plotly.newPlot(`plotq${quart}`, [trace1], layout, { displayModeBar: false });
     });
 }
-function MakeRequest(request, successFn) {
+
+const RequestDataTable = (request, successFn) => {
     var json = JSON.stringify({ request: request });
     $.ajax({
         url: "Landing.aspx/RequestDataTable",
@@ -64,11 +68,4 @@ function MakeRequest(request, successFn) {
         }
     });
 }
-function OnSuccess(response) {
-    var data = response.d;
-    $("#payload").val(data);
-    Render();
-}
-
-
  
