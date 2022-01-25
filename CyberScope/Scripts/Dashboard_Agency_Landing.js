@@ -19,23 +19,21 @@ const Render = () => {
     const response_json = $("#payload").val();
     const response_data = JSON.parse(response_json);
     const fy_filter_val = $("#fy_filter").val();
- 
-    let quart_data = { 1: { OT: 0, OD: 0 }, 2: { OT: 0, OD: 0 }, 3: { OT: 0, OD: 0 }, 4: { OT: 0, OD: 0 } };
-    const ycoords = response_data.reduce((result, item) => {
-        if (fy_filter_val == item.Year) { 
-            result[item.ScheduledActivationQuarter].OT += item.ONTIME;
-            result[item.ScheduledActivationQuarter].OD += item.OVERDUE; 
-        }
-        return result;
-    }, quart_data);
   
-    Object.keys(quart_data).forEach(quart => {
+    const ycoords = response_data.filter(i => i.Year == fy_filter_val).reduce((result, item) => {
+        if (!result[item.ScheduledActivationQuarter]) {
+            result[item.ScheduledActivationQuarter] = { OT: 0, OD: 0 };
+        } 
+        result[item.ScheduledActivationQuarter].OT += item.ONTIME;
+        result[item.ScheduledActivationQuarter].OD += item.OVERDUE;
+        return result;
+    }, {});
+    
+    Object.keys(ycoords).forEach(quart => {
         let trace1 = {
-            type: 'bar',
-            marker: { color: ['rgb(100,143,255)', 'rgb(195, 215, 255)', 'rgb(182, 182, 182)']},
+            type: 'bar',  marker: { color: ['rgb(100,143,255)', 'rgb(195, 215, 255)', 'rgb(182, 182, 182)'] },
             y: [ycoords[quart].OT, ycoords[quart].OD, ycoords[quart].OT + ycoords[quart].OD],
-            x: ['ONTIME', 'OVERDUE', 'TOTAL'],
-            width: [.9, .9, .9]
+            x: ['ONTIME', 'OVERDUE', 'TOTAL'] 
         };
         let layout = {
             title: `${fy_filter_val} Q${quart}`, height: 320
