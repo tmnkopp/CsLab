@@ -12,7 +12,7 @@
             MODE: "SELECT" 
         }
     } 
-    RequestDataTable(request, (response) => { 
+    RequestDataTable( request, (response) => {
         $("#payload").val(response.d);
         Render();
     }); 
@@ -51,10 +51,10 @@ const Render = () => {
     });
 }
 
-const RequestDataTable = (request, successFn) => {
+const RequestDataTable = (request, successFn, webservice ='RequestDataTable') => {
     var json = JSON.stringify({ request: request });
     $.ajax({
-        url: "Landing.aspx/RequestDataTable",
+        url: `Landing.aspx/${webservice}`,
         type: "POST",
         data: json,
         contentType: "application/json; charset=utf-8",
