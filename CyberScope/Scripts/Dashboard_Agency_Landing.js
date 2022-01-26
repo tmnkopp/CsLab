@@ -8,7 +8,7 @@ $(document).ready(async () => {
         } 
     });
 
-    Distinct('Year', data).sort().reverse().forEach(i => $("#fy_filter").append(`<option value=${i}>${i}</option>`));
+    Distinct('Year', data).sort().reverse().forEach(i => $("#fy_filter").append(`<option value=${i}>${i}</option>`)); 
     $("#fy_filter").val('2021').change(() => RenderPage());
 
     RenderPage(data);
