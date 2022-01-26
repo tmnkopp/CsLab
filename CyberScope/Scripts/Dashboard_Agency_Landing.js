@@ -1,26 +1,34 @@
 ﻿$(document).ready(async () => {
-     
-    const data = await RequestDataTable({
+    const request = {
         SPROC: "DashAgency",
         PARMS: {
             MODE: "SELECT"
-        } 
-    });
-
-    Distinct('Year', data).sort().reverse().forEach(i => $("#fy_filter").append(`<option value=${i}>${i}</option>`)); 
-    $("#fy_filter").val('2021').change(() => RenderPage());
-
-    RenderPage(data);
-    
+        }
+    }
+    const sub_his_data = await RequestDataTable(request); 
+    PrepareSubHist(sub_his_data);
+    RenderSubHist(sub_his_data);
 });
- 
-const RenderPage = (_json = $("#_data_cache").val()) => {
-    $("#_data_cache").val(_json);
-    const response_data = JSON.parse(_json);
-    const fy_filter_val = $("#fy_filter").val();
 
-    if (!/^20\d{2}$/.test(fy_filter_val)) return; 
-    const quart_data = response_data.filter(i => i.Year == fy_filter_val).reduce((result, item) => {
+const PrepareUpcomingDeadlines = (data) => {
+}
+const RenderUpcomingDeadlines = (data) => {
+} 
+const PrepareRolesPermissions = (data) => {
+}
+const RenderRolesPermissions = (data) => {
+}
+
+
+const PrepareSubHist = (data) => {
+    Distinct('Year', data).sort().reverse().forEach(i => $("#sel_year").append(`<option value=${i}>${i}</option>`));
+   $("#sel_year").val('2021').change(() => RenderSubHist(data));
+} 
+const RenderSubHist = (data) => {
+  
+    const sel_year_val = $("#sel_year").val(); 
+    if (!/^20\d{2}$/.test(sel_year_val)) return; 
+    const quart_data = data.filter(i => i.Year == sel_year_val).reduce((result, item) => {
         if (!result[item.ScheduledActivationQuarter]) {
             result[item.ScheduledActivationQuarter] = { OT: 0, OD: 0 };
         } 
@@ -38,7 +46,7 @@ const RenderPage = (_json = $("#_data_cache").val()) => {
             x: ['ONTIME', 'OVERDUE', 'TOTAL'] 
         };
         let layout = {
-            title: `${fy_filter_val} Q${k}`, height: 320
+            title: `${sel_year_val} Q${k}`, height: 320
         };
         Plotly.newPlot(`plotq${k}`, [trace1], layout, { displayModeBar: false });
     }); 
@@ -53,9 +61,10 @@ const RequestDataTable = async (request, successFn = (r)=>r) => {
             data: json,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: (response) => { 
-                successFn(response);
-                resolve(response.d);
+            success: (response) => {
+                const _json = JSON.parse(response.d);
+                successFn(_json);
+                resolve(_json);
             },
             failure: (response) => console.log(response.d),
             error: (response) => console.log(response.d)
@@ -63,6 +72,7 @@ const RequestDataTable = async (request, successFn = (r)=>r) => {
     });
 }
 const Distinct = (key, json) => {
-    let arr = JSON.parse(json).reduce((result, item) => [...result, item[key]], []);
+    let arr = json.reduce((result, item) => [...result, item[key]], []);
     return [...new Set(arr)];
-} 
+}
+const RequestKey = ({ SPROC, PARMS }) => (SPROC + '_' + JSON.stringify(PARMS).replace(/[^\w]/g, "_")).toLowerCase();
