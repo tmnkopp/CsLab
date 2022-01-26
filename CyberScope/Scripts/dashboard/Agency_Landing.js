@@ -22,3 +22,8 @@ const Distinct = (key, json) => {
     return [...new Set(arr)];
 }
 const RequestKey = ({ SPROC, PARMS }) => (SPROC + '_' + JSON.stringify(PARMS).replace(/[^\w]/g, "_")).toLowerCase();
+
+const range = (start, end) => {
+    const length = end - start;
+    return Array.from({ length }, (_, i) => start + i);
+}

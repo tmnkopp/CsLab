@@ -4,7 +4,7 @@ const rgbt = 'rgb(182, 182, 182)'
 
 
 $(document).ready(async () => {
- 
+    
     const sub_his_quart_data = await RequestDataTable({
         SPROC: "DashAgency",
         PARMS: {
@@ -50,15 +50,28 @@ const PrepareSubHist = (data) => {
     });
 }
 /* Sub Hist Module */
+const Merge = (data) => {
+    //let arr = json.reduce((result, item) => [...result, item[key]], []);
+    return data;
+}
+
 const RenderSubHist = (data) => { 
     const sel_year_val = $("#sel_year").val();  
     const quart_data = data.quart.filter(i => i.Year == sel_year_val);
     const mo_data = data.mo.filter(i => i.Year == sel_year_val);
+   
+    const plot_mo_data = []; 
+    range(1, 13).forEach(i => {
+        let row = mo_data.find(d => d.ScheduledActivationMonth == i);
+        plot_mo_data[i] = (row) ? row : { Year: sel_year_val, ScheduledActivationMonth: i, ONTIME: 0, OVERDUE: 0, TOTAL: 0 };
+    });
+    console.log(plot_mo_data);
+
+    const mo_x = plot_mo_data.map((i) => i.ScheduledActivationMonth);
+    const mo_ot = plot_mo_data.map((i) => i.ONTIME);
+    const mo_od = plot_mo_data.map((i) => i.OVERDUE);
+    const mo_tot = plot_mo_data.map((i) => i.TOTAL);
      
-    const mo_x = mo_data.map((i) => i.ScheduledActivationMonth);
-    const mo_ot = mo_data.map((i) => i.ONTIME);
-    const mo_od = mo_data.map((i) => i.OVERDUE);
-    const mo_tot = mo_data.map((i) => i.TOTAL);
     let trace1 = {
         y: mo_ot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbs, width: 4  }, name: 'ONTIME',
     };
@@ -68,7 +81,9 @@ const RenderSubHist = (data) => {
     let trace3 = {
         y: mo_tot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbp, width: 4 }, name: 'TOTAL',
     };
-    var layout = { barmode: 'group' };
+    var layout = {
+        xaxis: { tickmode: "linear", tick0: '1', dtick: 1
+        }, barmode: 'group' };
     Plotly.newPlot(`plot_mo`, [trace1, trace2, trace3], layout,{ displayModeBar: false });
    
     $(`div[id^='plotq']`).html('<h5 style="margin:25%;">NO DATA</h5>');
