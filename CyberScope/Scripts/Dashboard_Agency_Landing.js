@@ -1,7 +1,6 @@
-﻿ 
-$(document).ready(async () => {
+﻿$(document).ready(async () => {
      
-    let data = await RequestDataTable({
+    const data = await RequestDataTable({
         SPROC: "DashAgency",
         PARMS: {
             MODE: "SELECT"
@@ -12,7 +11,7 @@ $(document).ready(async () => {
     $("#fy_filter").val('2021').change(() => RenderPage());
 
     RenderPage(data);
- 
+    
 });
  
 const RenderPage = (_json = $("#_data_cache").val()) => {
@@ -20,8 +19,7 @@ const RenderPage = (_json = $("#_data_cache").val()) => {
     const response_data = JSON.parse(_json);
     const fy_filter_val = $("#fy_filter").val();
 
-    if (!/^20\d{2}$/.test(fy_filter_val)) return;
-
+    if (!/^20\d{2}$/.test(fy_filter_val)) return; 
     const quart_data = response_data.filter(i => i.Year == fy_filter_val).reduce((result, item) => {
         if (!result[item.ScheduledActivationQuarter]) {
             result[item.ScheduledActivationQuarter] = { OT: 0, OD: 0 };
@@ -65,6 +63,6 @@ const RequestDataTable = async (request, successFn = (r)=>r) => {
     });
 }
 const Distinct = (key, json) => {
-    let arr = JSON.parse(json).reduce((result, item) => [...result, item[key]] , []);
+    let arr = JSON.parse(json).reduce((result, item) => [...result, item[key]], []);
     return [...new Set(arr)];
 } 
