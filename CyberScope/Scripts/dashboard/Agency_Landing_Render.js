@@ -1,8 +1,7 @@
 ﻿const rgbp = 'rgb(100, 143, 255)'
 const rgbs = 'rgb(195, 215, 255)'
 const rgbt = 'rgb(182, 182, 182)'
-
-
+ 
 $(document).ready(async () => {
     
     const sub_his_quart_data = await RequestDataTable({
