@@ -1,23 +1,18 @@
-﻿$(document).ready(() => { 
-    RequestDataTable({
+﻿ 
+$(document).ready(async () => {
+     
+    let data = await RequestDataTable({
         SPROC: "DashAgency",
         PARMS: {
             MODE: "SELECT"
-        }
-    }, (response) => {
-        const years = JSON.parse(response.d).reduce((result, item) => [...result, item.Year], []);
-        [...new Set(years)].sort().reverse().forEach(i => $("#fy_filter").append(`<option value=${i}>${i}</option>`))
+        } 
     });
 
-    let DataRequest = {
-        SPROC: "DashAgency",
-        PARMS: {
-            MODE: "SELECT" 
-        }
-    } 
-    RequestDataTable(DataRequest, (response) => RenderPage(response.d));
-
+    Distinct('Year', data).sort().reverse().forEach(i => $("#fy_filter").append(`<option value=${i}>${i}</option>`));
     $("#fy_filter").val('2021').change(() => RenderPage());
+
+    RenderPage(data);
+ 
 });
  
 const RenderPage = (_json = $("#_data_cache").val()) => {
@@ -50,29 +45,26 @@ const RenderPage = (_json = $("#_data_cache").val()) => {
         Plotly.newPlot(`plotq${k}`, [trace1], layout, { displayModeBar: false });
     }); 
 }
-
  
-const RequestDataTable = (request, successFn, webservice = 'RequestDataTable') => {  
-    const json = JSON.stringify({ request: request });
-    $.ajax({
-        url: `Landing.aspx/${webservice}`,
-        type: "POST",
-        data: json,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: (response) => { 
-            successFn(response);
-        },
-        failure: (response) => {
-            console.log(response.d);
-        },
-        error: (response) => {
-            console.log(response.d);
-        }
+const RequestDataTable = async (request, successFn = (r)=>r) => {
+    return await new Promise((resolve, reject) => {
+        const json = JSON.stringify({ request: request }); 
+        $.ajax({
+            url: `Landing.aspx/RequestDataTable`,
+            type: "POST",
+            data: json,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: (response) => { 
+                successFn(response);
+                resolve(response.d);
+            },
+            failure: (response) => console.log(response.d),
+            error: (response) => console.log(response.d)
+        });
     });
 }
-const RequestKey = ({ SPROC, PARMS }) => (SPROC + '_' + JSON.stringify(PARMS).replace(/[^\w]/g, "_")).toLowerCase();
-const Distinct = (key, json) => { 
-    let result = JSON.parse(json).reduce((result, item) => [...result, item[key], []);
-    return [...new Set(result)]; 
-}
+const Distinct = (key, json) => {
+    let arr = JSON.parse(json).reduce((result, item) => [...result, item[key]] , []);
+    return [...new Set(arr)];
+} 
