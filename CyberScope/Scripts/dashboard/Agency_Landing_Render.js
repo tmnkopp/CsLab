@@ -2,8 +2,7 @@
 const rgbs = 'rgb(195, 215, 255)'
 const rgbt = 'rgb(182, 182, 182)'
  
-$(document).ready(async () => {
-    
+$(document).ready(async () => { 
     const sub_his_quart_data = await RequestDataTable({
         SPROC: "DashAgency",
         PARMS: {
@@ -22,22 +21,55 @@ $(document).ready(async () => {
     }
     PrepareSubHist(sub_his_data);
     RenderSubHist(sub_his_data);
+    RenderUpcomingDeadlines(sub_his_data);
+    RenderRolesPermissions(sub_his_data);
 });
-
-const PrepareUpcomingDeadlines = (data) => {
-    /* Upcoming Deadlines Module */
-}
+ 
 const RenderUpcomingDeadlines = (data) => {
-    /* Upcoming Deadlines Module */
-} 
-const PrepareRolesPermissions = (data) => {
-    /* Permissions Module*/
-}
+    const sel_year_val = $("#sel_year").val();
+    data = data.mo.filter(i => i.Year == sel_year_val);
+    
+    let container = document.getElementById("up-dead-grid");
+    let tr = document.createElement("tr");
+    container.appendChild(tr);
+    Object.entries(data[0]).forEach(([k, v]) => {
+        let td = document.createElement("td");
+        td.innerHTML = k;
+        tr.appendChild(td);
+    });
+    data.forEach(r => {
+        let tr = document.createElement("tr");
+        container.appendChild(tr);
+        Object.entries(r).forEach(([k, v]) => {
+            let td = document.createElement("td");
+            td.innerHTML = v;
+            tr.appendChild(td);
+        });
+    });
+}  
 const RenderRolesPermissions = (data) => {
-    /* Permissions Module*/
+    const sel_year_val = $("#sel_year").val();
+    data = data.quart.filter(i => i.Year == sel_year_val);
+ 
+    let container = document.getElementById("role-perm-grid");
+    let tr = document.createElement("tr");
+    container.appendChild(tr);
+    Object.entries(data[0]).forEach(([k, v]) => {
+        let td = document.createElement("td");
+        td.innerHTML = k;
+        tr.appendChild(td);
+    });
+    data.forEach(r => {
+        let tr = document.createElement("tr");
+        container.appendChild(tr);
+        Object.entries(r).forEach(([k, v]) => {
+            let td = document.createElement("td");
+            td.innerHTML = v;
+            tr.appendChild(td);
+        });
+    });
 }
-
-/* Sub Hist Module */
+ 
 const PrepareSubHist = (data) => { 
     Distinct('Year', data.quart).sort().reverse().forEach(i => $("#sel_year").append(`<option value=${i}>FY ${i}</option>`));
     $("#sel_year").val('2021').change(() => RenderSubHist(data));
@@ -47,13 +79,9 @@ const PrepareSubHist = (data) => {
         if ($("#sel_interval").val() == 'quart') $('#plot_mo').hide();
         if ($("#sel_interval").val() == 'mo') $('#plot_quart').hide();
     });
+    $('[data-toggle="tooltip"]').tooltip();
 }
-/* Sub Hist Module */
-const Merge = (data) => {
-    //let arr = json.reduce((result, item) => [...result, item[key]], []);
-    return data;
-}
-
+ 
 const RenderSubHist = (data) => { 
     const sel_year_val = $("#sel_year").val();  
     const quart_data = data.quart.filter(i => i.Year == sel_year_val);
@@ -63,8 +91,7 @@ const RenderSubHist = (data) => {
     range(1, 13).forEach(i => {
         let row = mo_data.find(d => d.ScheduledActivationMonth == i);
         plot_mo_data[i] = (row) ? row : { Year: sel_year_val, ScheduledActivationMonth: i, ONTIME: 0, OVERDUE: 0, TOTAL: 0 };
-    });
-    console.log(plot_mo_data);
+    }); 
 
     const mo_x = plot_mo_data.map((i) => i.ScheduledActivationMonth);
     const mo_ot = plot_mo_data.map((i) => i.ONTIME);
@@ -80,7 +107,7 @@ const RenderSubHist = (data) => {
     let trace3 = {
         y: mo_tot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbp, width: 4 }, name: 'TOTAL',
     };
-    var layout = {
+    let layout = {
         xaxis: { tickmode: "linear", tick0: '1', dtick: 1
         }, barmode: 'group' };
     Plotly.newPlot(`plot_mo`, [trace1, trace2, trace3], layout,{ displayModeBar: false });
