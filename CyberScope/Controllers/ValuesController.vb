@@ -10,7 +10,6 @@ Public Class ValuesController
     <HttpGet>
     <Route("api/values")>
     Public Function GetValues()
-
         dictionary.Add("bird", "20")
         dictionary.Add("frog", "1")
         dictionary.Add("snake", "10")
