@@ -28,46 +28,12 @@ $(document).ready(async () => {
 const RenderUpcomingDeadlines = (data) => {
     const sel_year_val = $("#sel_year").val();
     data = data.mo.filter(i => i.Year == sel_year_val);
-    
-    let container = document.getElementById("up-dead-grid");
-    let tr = document.createElement("tr");
-    container.appendChild(tr);
-    Object.entries(data[0]).forEach(([k, v]) => {
-        let td = document.createElement("td");
-        td.innerHTML = k;
-        tr.appendChild(td);
-    });
-    data.forEach(r => {
-        let tr = document.createElement("tr");
-        container.appendChild(tr);
-        Object.entries(r).forEach(([k, v]) => {
-            let td = document.createElement("td");
-            td.innerHTML = v;
-            tr.appendChild(td);
-        });
-    });
+    RenderGrid(data, 'up-dead-grid'); 
 }  
 const RenderRolesPermissions = (data) => {
     const sel_year_val = $("#sel_year").val();
     data = data.quart.filter(i => i.Year == sel_year_val);
- 
-    let container = document.getElementById("role-perm-grid");
-    let tr = document.createElement("tr");
-    container.appendChild(tr);
-    Object.entries(data[0]).forEach(([k, v]) => {
-        let td = document.createElement("td");
-        td.innerHTML = k;
-        tr.appendChild(td);
-    });
-    data.forEach(r => {
-        let tr = document.createElement("tr");
-        container.appendChild(tr);
-        Object.entries(r).forEach(([k, v]) => {
-            let td = document.createElement("td");
-            td.innerHTML = v;
-            tr.appendChild(td);
-        });
-    });
+    RenderGrid(data, 'role-perm-grid'); 
 }
  
 const PrepareSubHist = (data) => { 
@@ -98,18 +64,11 @@ const RenderSubHist = (data) => {
     const mo_od = plot_mo_data.map((i) => i.OVERDUE);
     const mo_tot = plot_mo_data.map((i) => i.TOTAL);
      
-    let trace1 = {
-        y: mo_ot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbs, width: 4  }, name: 'ONTIME',
-    };
-    let trace2 = {
-        y: mo_od, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbt, width: 4  }, name: 'OVERDUE',
-    };
-    let trace3 = {
-        y: mo_tot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbp, width: 4 }, name: 'TOTAL',
-    };
-    let layout = {
-        xaxis: { tickmode: "linear", tick0: '1', dtick: 1
-        }, barmode: 'group' };
+    let trace1 = {  y: mo_ot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbs  }, name: 'ONTIME'  };
+    let trace2 = {  y: mo_od, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbt  }, name: 'OVERDUE' };
+    let trace3 = {  y: mo_tot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbp }, name: 'TOTAL'  };
+    let layout = { xaxis: { tickmode: "linear", tick0: '1', dtick: 1 }, barmode: 'group' };
+
     Plotly.newPlot(`plot_mo`, [trace1, trace2, trace3], layout,{ displayModeBar: false });
    
     $(`div[id^='plotq']`).html('<h5 style="margin:25%;">NO DATA</h5>');

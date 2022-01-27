@@ -17,14 +17,32 @@
         });
     });
 }
+const RenderGrid = (data, gridid) => { 
+    let container = document.getElementById(gridid);
+    let tr = document.createElement("tr");
+    container.appendChild(tr);
+    Object.entries(data[0]).forEach(([k, v]) => {
+        let td = document.createElement("td");
+        td.innerHTML = k;
+        tr.appendChild(td);
+    });
+    data.forEach(r => {
+        let tr = document.createElement("tr");
+        container.appendChild(tr);
+        Object.entries(r).forEach(([k, v]) => {
+            let td = document.createElement("td");
+            td.innerHTML = v;
+            tr.appendChild(td);
+        });
+    }); 
+}
 const Distinct = (key, json) => {
     let arr = json.reduce((result, item) => [...result, item[key]], []);
     return [...new Set(arr)];
-}
-const RequestKey = ({ SPROC, PARMS }) => (SPROC + '_' + JSON.stringify(PARMS).replace(/[^\w]/g, "_")).toLowerCase();
-
+} 
 const range = (start, end) => {
     const length = end - start;
     return Array.from({ length }, (_, i) => start + i);
 }
+const RequestKey = ({ SPROC, PARMS }) => (SPROC + '_' + JSON.stringify(PARMS).replace(/[^\w]/g, "_")).toLowerCase();
  
