@@ -15,24 +15,22 @@ $(document).ready(async () => {
             MODE: "SUB_HIS_MONTH"
         }
     });
-    const sub_his_data = {
+    const data = {
         quart: sub_his_quart_data
         , mo: sub_his_mo_data
     }
-    PrepareSubHist(sub_his_data);
-    RenderSubHist(sub_his_data);
-    RenderUpcomingDeadlines(sub_his_data);
-    RenderRolesPermissions(sub_his_data);
+    PrepareSubHist(data);
+    RenderSubHist(data);
+    RenderUpcomingDeadlines(data);
+    RenderRolesPermissions(data);
 });
  
-const RenderUpcomingDeadlines = (data) => {
-    const sel_year_val = $("#sel_year").val();
-    data = data.mo.filter(i => i.Year == sel_year_val);
-    RenderGrid(data, 'up-dead-grid'); 
+const RenderUpcomingDeadlines = (data) => { 
+    data = data.mo.filter(i => i.Year == $("#sel_year").val());
+    RenderGrid(data, 'up-dead-grid');
 }  
-const RenderRolesPermissions = (data) => {
-    const sel_year_val = $("#sel_year").val();
-    data = data.quart.filter(i => i.Year == sel_year_val);
+const RenderRolesPermissions = (data) => { 
+    data = data.quart.filter(i => i.Year == $("#sel_year").val());
     RenderGrid(data, 'role-perm-grid'); 
 }
  
@@ -52,7 +50,7 @@ const RenderSubHist = (data) => {
     const sel_year_val = $("#sel_year").val();  
     const quart_data = data.quart.filter(i => i.Year == sel_year_val);
     const mo_data = data.mo.filter(i => i.Year == sel_year_val);
-   
+
     const plot_mo_data = []; 
     range(1, 13).forEach(i => {
         let row = mo_data.find(d => d.ScheduledActivationMonth == i);
@@ -67,21 +65,18 @@ const RenderSubHist = (data) => {
     let trace1 = {  y: mo_ot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbs  }, name: 'ONTIME'  };
     let trace2 = {  y: mo_od, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbt  }, name: 'OVERDUE' };
     let trace3 = {  y: mo_tot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbp }, name: 'TOTAL'  };
-    let layout = { xaxis: { tickmode: "linear", tick0: '1', dtick: 1 }, barmode: 'group' };
-
+    let layout = { xaxis: { tickmode: "linear", tick0: '1', dtick: 1 }, barmode: 'group' }; 
     Plotly.newPlot(`plot_mo`, [trace1, trace2, trace3], layout,{ displayModeBar: false });
-   
+
+
     $(`div[id^='plotq']`).html('<h5 style="margin:25%;">NO DATA</h5>');
     Object.entries(quart_data).forEach(([k, v]) => {
         $(`div[id^='plotq${v.ScheduledActivationQuarter}']`).html('');
         let trace1 = {
             type: 'bar', marker: { color: [rgbs, rgbt, rgbp] },
-            y: [v.ONTIME, v.OVERDUE, v.TOTAL],
-            x: ['ONTIME', 'OVERDUE', 'TOTAL'] 
+            y: [v.ONTIME, v.OVERDUE, v.TOTAL],  x: ['ONTIME', 'OVERDUE', 'TOTAL'] 
         };
-        let layout = {
-            title: `${sel_year_val} Q${v.ScheduledActivationQuarter}`, height: 320
-        };
+        let layout = {  title: `${sel_year_val} Q${v.ScheduledActivationQuarter}`, height: 320 };
         Plotly.newPlot(`plotq${v.ScheduledActivationQuarter}`, [trace1], layout, { displayModeBar: false });
     });  
 }
