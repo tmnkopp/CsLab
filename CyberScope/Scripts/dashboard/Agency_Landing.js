@@ -1,6 +1,4 @@
-﻿const rgbp = 'rgb(100, 143, 255)', rgbs = 'rgb(195, 215, 255)', rgbt = 'rgb(182, 182, 182)'
-
-$(document).ready(() => {
+﻿$(document).ready(() => {
     $('[data-toggle="tooltip"]').tooltip();
 }); 
 
@@ -51,4 +49,8 @@ const range = (start, end) => {
     return Array.from({ length }, (_, i) => start + i);
 }
 const RequestKey = ({ SPROC, PARMS }) => (SPROC + '_' + JSON.stringify(PARMS).replace(/[^\w]/g, "_")).toLowerCase();
+
+const rgbp = 'rgb(100, 143, 255)', rgbs = 'rgb(195, 215, 255)', rgbt = 'rgb(182, 182, 182)'; 
+const mo_x = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; 
+
  

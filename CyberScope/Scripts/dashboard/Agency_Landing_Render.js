@@ -11,18 +11,17 @@
         quart: sub_his_quart_data
         , mo: sub_his_mo_data 
     }
-    PreparePage(data);
+    PrepareSubHist(data);
     RenderSubHist(data); 
 }); 
  
-const PreparePage = (data) => { 
+const PrepareSubHist = (data) => { 
     Distinct('Year', data.quart).sort().reverse().forEach(i => $("#sel_year").append(`<option value=${i}>FY ${i}</option>`));
     $("#sel_year").change(() => RenderSubHist(data));
     $("#sel_interval").change(() => { 
-        $('#plot_mo').show();
-        $('#plot_quart').show();
-        if ($("#sel_interval").val() == 'quart') $('#plot_mo').hide();
-        if ($("#sel_interval").val() == 'mo') $('#plot_quart').hide();
+        $('#plot_mo').hide();
+        $('#plot_quart').hide();
+        $('#plot_' + $("#sel_interval").val()).show();
     }); 
 } 
 
@@ -32,12 +31,13 @@ const RenderSubHist = (data) => {
     const mo_data = data.mo.filter(i => i.Year == sel_year_val);
 
     const plot_mo_data = []; 
-    range(1, 13).forEach(i => {
-        let row = mo_data.find(d => d.ScheduledActivationMonth == i);
+    range(0, 12).forEach(i => {
+        let row = mo_data.find(d => d.ScheduledActivationMonth-1 == i);
         plot_mo_data[i] = (row) ? row : { Year: sel_year_val, ScheduledActivationMonth: i, ONTIME: 0, OVERDUE: 0, TOTAL: 0 };
     }); 
 
-    const mo_x = plot_mo_data.map((i) => i.ScheduledActivationMonth);
+    console.log( plot_mo_data );
+ 
     const mo_ot = plot_mo_data.map((i) => i.ONTIME);
     const mo_od = plot_mo_data.map((i) => i.OVERDUE);
     const mo_tot = plot_mo_data.map((i) => i.TOTAL);
@@ -45,7 +45,7 @@ const RenderSubHist = (data) => {
     let trace1 = {  y: mo_ot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbs  }, name: 'ONTIME'  };
     let trace2 = {  y: mo_od, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbt  }, name: 'OVERDUE' };
     let trace3 = {  y: mo_tot, x: mo_x, type: 'bar', mode: 'lines', marker: { color: rgbp }, name: 'TOTAL'  };
-    let layout = { xaxis: { tickmode: "linear", tick0: '1', dtick: 1 }, barmode: 'group' }; 
+    let layout = { xaxis: { tickangle: -45, tickmode: "linear", tick0: '1', dtick: 1 }, barmode: 'group' }; 
     Plotly.newPlot(`plot_mo`, [trace1, trace2, trace3], layout,{ displayModeBar: false });
      
     $(`div[id^='plotq']`).html('<h5 style="margin:25%;">NO DATA</h5>');
