@@ -15,46 +15,15 @@ $(document).ready(async () => {
         PARMS: {
             MODE: "SUB_HIS_MONTH"
         }
-    });
-    const up_dead_data = await RequestDataTable({
-        SPROC: "DashAgency",
-        PARMS: {
-            MODE: "UP_DEAD"
-        }
-    });
+    }); 
     const data = {
         quart: sub_his_quart_data
-        , mo: sub_his_mo_data
-        , upd: up_dead_data
+        , mo: sub_his_mo_data 
     }
     PreparePage(data);
-    RenderSubHist(data);
-    RenderUpcomingDeadlines(data);
-    RenderRolesPermissions(data);
+    RenderSubHist(data); 
 }); 
- 
-const RenderUpcomingDeadlines = (data) => {  
-    data = data.upd;  
-    $("#up-dead-grid").kendoGrid({
-        columns: [{
-            field: "Url",
-            title: "Url",
-            template : '<a href=\"#=Url#\" target="_blank">LINK</a>'  
-        },{
-            field: "RC_Description"
-            , title: "Description" 
-        },{
-            field: "RC_ScheduledClosed"
-            , title: "ScheduledClosed" 
-        },{
-            field: "RCC_Status_Code"
-            , title: "Status Code" 
-        }],
-        dataSource: {
-            data: data
-        }
-    });    
-}  
+  
 const RenderRolesPermissions = (data) => { 
     data = data.quart.filter(i => i.Year == $("#sel_year").val()); 
     
@@ -81,10 +50,7 @@ const PreparePage = (data) => {
         if ($("#sel_interval").val() == 'quart') $('#plot_mo').hide();
         if ($("#sel_interval").val() == 'mo') $('#plot_quart').hide();
     });
-
-    Distinct('RC_Description', data.upd).forEach(i => $("#sel_datacall").append(`<option value="">${i}</option>`));
-    $("#sel_datacall").change(() => RenderSubHist(data));
-  
+ 
     $('[data-toggle="tooltip"]').tooltip();
 } 
 const RenderSubHist = (data) => { 
