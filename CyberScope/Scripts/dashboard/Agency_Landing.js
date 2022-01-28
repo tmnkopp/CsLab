@@ -1,4 +1,10 @@
-﻿const RequestDataTable = async (request, successFn = (r)=>r) => {
+﻿const rgbp = 'rgb(100, 143, 255)', rgbs = 'rgb(195, 215, 255)', rgbt = 'rgb(182, 182, 182)'
+
+$(document).ready(() => {
+    $('[data-toggle="tooltip"]').tooltip();
+}); 
+
+const RequestDataTable = async (request, successFn = (r)=>r) => {
     return await new Promise((resolve, reject) => {
         const json = JSON.stringify({ request: request }); 
         $.ajax({

@@ -1,20 +1,11 @@
-﻿const rgbp = 'rgb(100, 143, 255)'
-const rgbs = 'rgb(195, 215, 255)'
-const rgbt = 'rgb(182, 182, 182)'
- 
-$(document).ready(async () => { 
-  
+﻿$(document).ready(async () => {  
     const sub_his_quart_data = await RequestDataTable({
         SPROC: "DashAgency",
-        PARMS: {
-            MODE: "SUB_HIS_QUARTER"
-        }
+        PARMS: {  MODE: "SUB_HIS_QUARTER"  }
     });
     const sub_his_mo_data = await RequestDataTable({
         SPROC: "DashAgency",
-        PARMS: {
-            MODE: "SUB_HIS_MONTH"
-        }
+        PARMS: {   MODE: "SUB_HIS_MONTH" }
     }); 
     const data = {
         quart: sub_his_quart_data
@@ -23,36 +14,18 @@ $(document).ready(async () => {
     PreparePage(data);
     RenderSubHist(data); 
 }); 
-  
-const RenderRolesPermissions = (data) => { 
-    data = data.quart.filter(i => i.Year == $("#sel_year").val()); 
-    
-    $("#role-perm-grid").kendoGrid({
-        columns: [{
-            field: "UrlPattern",
-            title: "UrlPattern",
-            template : '<a href=\"#=UrlPattern#\" target="_blank">LINK</a>'  
-        },     {
-            field: "Year",
-            title: "Year" 
-        }],
-        dataSource: {
-            data: data
-        }
-    });
-} 
+ 
 const PreparePage = (data) => { 
     Distinct('Year', data.quart).sort().reverse().forEach(i => $("#sel_year").append(`<option value=${i}>FY ${i}</option>`));
-    $("#sel_year").val('2021').change(() => RenderSubHist(data));
+    $("#sel_year").change(() => RenderSubHist(data));
     $("#sel_interval").change(() => { 
         $('#plot_mo').show();
         $('#plot_quart').show();
         if ($("#sel_interval").val() == 'quart') $('#plot_mo').hide();
         if ($("#sel_interval").val() == 'mo') $('#plot_quart').hide();
-    });
- 
-    $('[data-toggle="tooltip"]').tooltip();
+    }); 
 } 
+
 const RenderSubHist = (data) => { 
     const sel_year_val = $("#sel_year").val();  
     const quart_data = data.quart.filter(i => i.Year == sel_year_val);

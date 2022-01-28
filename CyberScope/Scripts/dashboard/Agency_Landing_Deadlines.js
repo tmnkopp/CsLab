@@ -12,11 +12,12 @@ $(document).ready(async () => {
     } 
     RenderUpcomingDeadlines(data); 
     Distinct('RC_Description', data.upd).forEach(i => $("#sel_datacall").append(`<option value="">${i}</option>`));
-    $("#sel_datacall").change(() => RenderSubHist(data));
+    $("#sel_datacall").change(() => RenderUpcomingDeadlines(data));
 }); 
  
 const RenderUpcomingDeadlines = (data) => {  
     data = data.upd;  
+    $(".up-dead-wrapper .k-grid").html('<div id="up-dead-grid"></div>');
     $("#up-dead-grid").kendoGrid({
         columns: [{
             field: "Url",
