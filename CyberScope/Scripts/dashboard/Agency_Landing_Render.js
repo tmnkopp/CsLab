@@ -35,8 +35,6 @@ const RenderSubHist = (data) => {
         let row = mo_data.find(d => d.ScheduledActivationMonth-1 == i);
         plot_mo_data[i] = (row) ? row : { Year: sel_year_val, ScheduledActivationMonth: i, ONTIME: 0, OVERDUE: 0, TOTAL: 0 };
     }); 
-
-    console.log( plot_mo_data );
  
     const mo_ot = plot_mo_data.map((i) => i.ONTIME);
     const mo_od = plot_mo_data.map((i) => i.OVERDUE);
