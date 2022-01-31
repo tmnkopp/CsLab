@@ -52,5 +52,4 @@ const RequestKey = ({ SPROC, PARMS }) => (SPROC + '_' + JSON.stringify(PARMS).re
 
 const rgbp = 'rgb(100, 143, 255)', rgbs = 'rgb(195, 215, 255)', rgbt = 'rgb(182, 182, 182)'; 
 const mo_x = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; 
-
- 
+  

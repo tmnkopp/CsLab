@@ -24,7 +24,7 @@ const PrepareSubHist = (data) => {
         $('#plot_' + $("#sel_interval").val()).show();
     }); 
 } 
-
+ 
 const RenderSubHist = (data) => { 
     const sel_year_val = $("#sel_year").val();  
     const quart_data = data.quart.filter(i => i.Year == sel_year_val);
