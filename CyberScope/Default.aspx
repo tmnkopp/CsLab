@@ -4,12 +4,12 @@
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
  
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
     <script type="text/javascript">
         function getit() {
          
             $.getJSON("api/values",
-            function (data) {
-                console.log(data);
+            function (data) { 
                 // $.each(data, function (key, val) { 
                 //     console.log(key);
                 // });
@@ -23,15 +23,16 @@
                 value: 'asdf'
             }));
         }
-        $(document).ready(function () {
+        $(document).ready(function () { 
+
             getit();
             postit(); 
         });
 
   
     </script>
-  
-    <lab:CBGrid runat="server" ID="CBGrid"> 
-    </lab:CBGrid>
+    <%= If((HttpContext.Current.IsDebuggingEnabled), "src", "dist") %>
+    <script src="<%= Page.ResolveClientUrl("~/Scripts/build/bundle.js") %>"></script>
+    
 </asp:Content>
  

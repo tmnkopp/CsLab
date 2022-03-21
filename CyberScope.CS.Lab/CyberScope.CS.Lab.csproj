@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="CustomControls\CBCommandItemGrid.cs" />
+    <Compile Include="CustomControls\CBForm.cs" />
     <Compile Include="CustomControls\CBGrid.cs" />
     <Compile Include="CustomControls\CBMultiAnswerGrid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

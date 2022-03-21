@@ -27,7 +27,7 @@ Public Class ValuesController
     <Route("api/values")>
     Public Sub PostValue(<FromBody()> ByVal value)
         Dim t As Testy = JObject.FromObject(value).ToObject(Of Testy)()
-        Dim j = New JavaScriptSerializer().Deserialize(Of Dictionary(Of String, Object))(value)
+        'Dim j = New JavaScriptSerializer().Deserialize(Of Dictionary(Of String, Object))(value)
         Dim x = value
     End Sub
 

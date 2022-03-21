@@ -12,8 +12,8 @@ Public Class _Default
 
 
     Protected Overrides Sub OnInit(ByVal e As System.EventArgs)
+
         MyBase.OnInit(e)
-        CBGrid.DataBind()
     End Sub
     Protected Overrides Sub OnPreInit(ByVal e As System.EventArgs)
         MyBase.OnPreInit(e)

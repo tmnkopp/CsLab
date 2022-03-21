@@ -11,6 +11,8 @@ namespace CyberScope.CS.Lab.Tests
         [TestMethod]
         public void TestMethod1()
         {
+            bool a=true, b=false ;
+            var x = (a) ? "src" : "dist";
         }
     }
     public class CBServiceUtil

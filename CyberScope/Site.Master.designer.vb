@@ -14,6 +14,24 @@ Option Explicit On
 Partial Public Class SiteMaster
 
     '''<summary>
+    '''form1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
+
+    '''<summary>
+    '''pageScriptManager control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pageScriptManager As Global.System.Web.UI.ScriptManager
+
+    '''<summary>
     '''MainContent control.
     '''</summary>
     '''<remarks>
