@@ -1,6 +1,6 @@
 "use strict";
 
-var _person = _interopRequireDefault(require("./person"));
+var _person = _interopRequireDefault(require("./models/person"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

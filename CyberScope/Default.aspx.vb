@@ -9,10 +9,7 @@ Imports CyberBalance.VB.Core
 Public Class _Default
     Inherits Page
     Dim oDb As DataBaseUtils2 = New DataBaseUtils2()
-
-
     Protected Overrides Sub OnInit(ByVal e As System.EventArgs)
-
         MyBase.OnInit(e)
     End Sub
     Protected Overrides Sub OnPreInit(ByVal e As System.EventArgs)

@@ -7,9 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
-  "browserslist": [
-    "defaults"
-  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

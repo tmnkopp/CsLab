@@ -6,15 +6,40 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <script type="text/javascript">
-        function getit() {
-         
-            $.getJSON("api/values",
-            function (data) { 
-                // $.each(data, function (key, val) { 
-                //     console.log(key);
-                // });
+
+        $(document).ready(function () {
+       
+            var SprocRequestCollection = {
+                "DataTable1": {
+                    SprocName: "CISA_CVE_CRUD",
+                    PARMS: {
+                        "MODE": "SELECT"
+                    }
+                }, "DataTable2": {
+                    SprocName: "CISA_CVE_CRUD",
+                    PARMS: {
+                        "MODE": "SELECT"
+                    }
+                }
+            } 
+            var json = JSON.stringify({ request: SprocRequestCollection });
+            $.ajax({
+                url: `WebMethod1.aspx/SprocRequest`,
+                type: "POST",
+                data: json,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: (response) => {
+                    var _json = JSON.parse(response.d);
+                    console.log(_json);
+                },
+                failure: (response) => console.log(response.d),
+                error: (response) => console.log(response.d)
             });
-        }
+
+
+        });
+  
         function postit() {
             var xhr = new XMLHttpRequest();
             xhr.open("POST", 'api/values', true);
@@ -23,16 +48,11 @@
                 value: 'asdf'
             }));
         }
-        $(document).ready(function () { 
-
-            getit();
-            postit(); 
-        });
+ 
 
   
     </script>
     <%= If((HttpContext.Current.IsDebuggingEnabled), "src", "dist") %>
-    <script src="<%= Page.ResolveClientUrl("~/Scripts/build/bundle.js") %>"></script>
-    
+ 
 </asp:Content>
  
