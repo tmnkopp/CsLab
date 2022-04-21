@@ -94,6 +94,10 @@
       <Project>{0da2d4fd-c4c4-4744-9ac8-2563be5d91ae}</Project>
       <Name>CyberBalance.VB.Web.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CyberScope.Automator\CyberScope.Automator.csproj">
+      <Project>{dfa1d93b-0ba0-40ce-889a-4143665d2f3b}</Project>
+      <Name>CyberScope.Automator</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
