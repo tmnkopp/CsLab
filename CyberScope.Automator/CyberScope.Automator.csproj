@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <StartupObject>CyberScope.Automator.Program</StartupObject>
+    <StartupObject></StartupObject>
+    <ApplicationIcon />
   </PropertyGroup>
 
   <ItemGroup>

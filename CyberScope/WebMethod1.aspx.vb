@@ -9,16 +9,15 @@ Public Class WebMethod1
     Inherits System.Web.UI.Page
 
     <WebMethod()>
-    Public Shared Function SprocRequest(request As Dictionary(Of String, SprocRequest))
+    Public Shared Function SprocRequest(request As Dictionary(Of String, DataRequest))
         Dim _CAUser As CAuser, _UrlParams As URLParms
         CBWebBase.Init(_CAUser, _UrlParams)
 
         Dim response = New DataResponseService() _
             .SetUser(_CAUser) _
-            .ApplySprocRequest(request) _
-            .PerformRequest() _
-            .ApplyUrlEncryption(Function(f) _UrlParams.EncryptURL(f)) _
-            .GetResponseAsJson()
+            .ApplyRequest(request) _
+            .ApplyUrlEncryption(_UrlParams) _
+            .GetResponse()
 
         Return response
 

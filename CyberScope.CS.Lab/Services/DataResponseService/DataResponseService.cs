@@ -12,45 +12,52 @@ using Newtonsoft.Json;
 
 namespace CyberScope.CS.Lab.Models
 {
-    public class SprocRequest
-    {
-        public string SprocName { get; set; } 
-        public Dictionary<string, string> PARMS { get; set; }
-        public SprocRequest()
-        { 
-            PARMS = new Dictionary<string, string>();
-        }
-    }  
-    public class DataTableResponse
-    { 
-        public string ResponseId { get; set; }
-        public DataTable DataTable { get; set; }
-    }
     public class DataResponseService{
 
         #region FIELDS
-        private Dictionary<string, DataTable> DataResponses { get; set; } = new Dictionary<string, DataTable>();
-        private Dictionary<string, SprocRequest> RequestCollection { get; set; } = new Dictionary<string, SprocRequest>();
-        private CAuser _CAUser { get; set; }
+        private Dictionary<string, DataTable> DataResponseDict { get; set; } = new Dictionary<string, DataTable>();
+        private Dictionary<string, DataRequest> RequestCollection { get; set; } = new Dictionary<string, DataRequest>(); 
+        private CAuser _CAuser { get; set; }
+        private URLParms _UrlParams { get; set; }
         #endregion
 
         #region CTOR
         public DataResponseService()
         { 
-        }
-        public DataResponseService(Dictionary<string, SprocRequest> RequestCollection):base()
-        {
-            this.RequestCollection = RequestCollection;
-        }
+        } 
         #endregion
 
-        #region FLUENT ACCESSORS 
-        public DataResponseService ApplySprocRequest(Dictionary<string, SprocRequest> RequestCollection)
+        #region BUILDERS PUBLIC
+        public DataResponseService ApplyRequest(Dictionary<string, DataRequest> RequestCollection)
         {
             this.RequestCollection = RequestCollection;
             return this;
         }
-        public DataResponseService PerformRequest()
+        public DataResponseService SetUser(CAuser CAuser)
+        {
+            this._CAuser = CAuser;
+            return this;
+        }
+        private bool _ApplyUrlEncryption = false;
+        public DataResponseService ApplyUrlEncryption(URLParms URLParms)
+        {
+            this._UrlParams = URLParms;
+            _ApplyUrlEncryption = true;
+            return this;
+        } 
+        public Dictionary<string, DataTable> GetDataTables()
+        {
+            PopulateDataTables();
+            return DataResponseDict;
+        }
+        public string GetResponse()
+        { 
+            return JsonConvert.SerializeObject(GetDataTables()); 
+        }
+        #endregion
+
+        #region PRIV METHODS
+        private DataResponseService PopulateDataTables()
         {
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["CAClientConnectionString"].ConnectionString);
             conn.Open();
@@ -66,17 +73,17 @@ namespace CyberScope.CS.Lab.Models
                     {
                         cmd.Parameters.AddWithValue($"@{parm.Key}", parm.Value);
                     }
-                    if (_CAUser != null)
+                    if (_CAuser != null)
                     {
                         if (!cmd.Parameters.Contains("@PK_OrgSubmission") && SprocHasParam(cmd, "@PK_OrgSubmission"))
-                            cmd.Parameters.AddWithValue($"@PK_OrgSubmission", _CAUser.PK_OrgSubmission);
+                            cmd.Parameters.AddWithValue($"@PK_OrgSubmission", _CAuser.PK_OrgSubmission);
                         if (!cmd.Parameters.Contains("@UserId") && SprocHasParam(cmd, "@UserId"))
-                            cmd.Parameters.AddWithValue($"@UserId", _CAUser.UserPK);
+                            cmd.Parameters.AddWithValue($"@UserId", _CAuser.UserPK);
                     }
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
-                    this.DataResponses.Add(request.Key, dataTable);
+                    this.DataResponseDict.Add(request.Key, dataTable);
                     cmd.Dispose();
                 }
             }
@@ -84,51 +91,36 @@ namespace CyberScope.CS.Lab.Models
             {
                 conn.Close();
             }
+            if (_ApplyUrlEncryption)
+            {
+                ApplyDataTransformations();
+            }
             return this;
-        }
-
-        public DataResponseService SetUser(CAuser CAuser)
+        }  
+       
+        private void ApplyDataTransformations()
         {
-            this._CAUser = CAuser;
-            return this;
-        }
-
-        public DataResponseService ApplyUrlEncryption(Func<string, string> UrlEncrypter)
-        {
-            var keys = DataResponses.Keys.Select(k => k).ToArray();
+            var keys = DataResponseDict.Keys.Select(k => k).ToArray();
             foreach (var key in keys)
             {
-                var dt = DataResponses[key];
+                var dt = DataResponseDict[key];
                 foreach (DataRow dr in dt.Rows)
                 {
                     foreach (DataColumn col in dt.Columns)
                     {
-                        var val = dr[col].ToString();
-                        if (Regex.IsMatch(val, $@"^~\/.+\.aspx\?.*"))
-                        {
-                            var url = dr[col].ToString();
-                            url = System.Web.VirtualPathUtility.ToAbsolute(url);
-                            url = UrlEncrypter(url);
-                            dr[col] = url;
+                        var dataVal = dr[col].ToString();
+                        if (Regex.IsMatch(dataVal, $@"^~\/.+\.aspx\?.*"))
+                        { 
+                            dataVal = System.Web.VirtualPathUtility.ToAbsolute(dataVal);
+                            dataVal = _UrlParams.EncryptURL(dataVal); 
                         }
+                        dr[col] = dataVal;
                     }
                 }
-                DataResponses[key] = dt;
-            }
-            return this;
-        } 
-        public Dictionary<string, DataTable> GetResponseAsDataTables()
-        {
-            return DataResponses;
-        } 
-        public string GetResponseAsJson()
-        {
-            return JsonConvert.SerializeObject(DataResponses);
-        }
+                DataResponseDict[key] = dt;
+            } 
+        }   
 
-        #endregion
-         
-        #region PRIV METHODS
         private bool SprocHasParam(SqlCommand command, string Param)
         {
             SqlCommand cmd = command.Clone();

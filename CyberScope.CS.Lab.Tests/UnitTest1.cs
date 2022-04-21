@@ -2,12 +2,19 @@
 using CyberBalance.VB.Web.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-
+ 
 namespace CyberScope.CS.Lab.Tests
 {
+ 
     [TestClass]
     public class UnitTest1
     {
+        [TestMethod]
+        public void Automator_Inits()
+        {
+            //CyberScope.Automator.CsDriverService ds = new
+        }
+
         [TestMethod]
         public void TestMethod1()
         {
