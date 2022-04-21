@@ -6,7 +6,7 @@ namespace CyberScope.Automator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+ 
         }
     }
 }
