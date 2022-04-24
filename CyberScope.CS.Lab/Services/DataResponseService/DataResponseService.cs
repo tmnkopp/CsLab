@@ -4,13 +4,14 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CyberBalance.VB.Core;
 using Newtonsoft.Json;
 
-namespace CyberScope.CS.Lab.Models
+namespace CyberScope.CS.Lab.Services
 {
     public class DataResponseService{
 
@@ -19,18 +20,20 @@ namespace CyberScope.CS.Lab.Models
         private Dictionary<string, DataRequest> RequestCollection { get; set; } = new Dictionary<string, DataRequest>(); 
         private CAuser _CAuser { get; set; }
         private URLParms _UrlParams { get; set; }
+        private List<ITransformData> DataTransforms { get; set; } = new List<ITransformData>();
         #endregion
 
         #region CTOR
         public DataResponseService()
         { 
-        } 
+
+        }
         #endregion
 
-        #region BUILDERS PUBLIC
-        public DataResponseService ApplyRequest(Dictionary<string, DataRequest> RequestCollection)
+        #region BUILDERS PUBLIC  
+        public DataResponseService ApplyRequest(Dictionary<string, DataRequest> Request)
         {
-            this.RequestCollection = RequestCollection;
+            this.RequestCollection = Request;
             return this;
         }
         public DataResponseService SetUser(CAuser CAuser)
@@ -83,22 +86,39 @@ namespace CyberScope.CS.Lab.Models
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
+                     
+                    foreach (var dt in request.Value.DataTransforms)
+                    {
+                        var typ = AssmTypes().Where(t => t.Name == dt && typeof(ITransformData).IsAssignableFrom(t)).FirstOrDefault();
+                        if (typ != null)
+                        {
+                            ITransformData obj = (ITransformData)Activator.CreateInstance(typ);
+                            DataTransformContext dtc = new DataTransformContext(dataTable, _CAuser, _UrlParams); 
+                            dataTable = obj.Transform(dtc);
+                        }
+                    }
+
                     this.DataResponseDict.Add(request.Key, dataTable);
-                    cmd.Dispose();
+                    cmd.Dispose(); 
                 }
             }
             finally
             {
                 conn.Close();
             }
+ 
             if (_ApplyUrlEncryption)
             {
-                ApplyDataTransformations();
+                ApplyUrlEncryption();
             }
             return this;
-        }  
-       
-        private void ApplyDataTransformations()
+        }
+        private Type[] AssmTypes()
+        {
+            Assembly assm = Assembly.GetExecutingAssembly();
+            return assm.GetTypes();
+        }
+        private void ApplyUrlEncryption()
         {
             var keys = DataResponseDict.Keys.Select(k => k).ToArray();
             foreach (var key in keys)

@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace CyberScope.CS.Lab.Models
+namespace CyberScope.CS.Lab.Services
 {
     public class DataTableResponse
     { 

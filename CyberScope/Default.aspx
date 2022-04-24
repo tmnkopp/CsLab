@@ -9,20 +9,21 @@
 
         $(document).ready(function () {
        
-            var SprocRequestCollection = {
+            var DataRequestDict = {
                 "DataTable1": {
                     SprocName: "CISA_CVE_CRUD",
                     PARMS: {
                         "MODE": "SELECT"
-                    }
+                    } 
                 }, "DataTable2": {
                     SprocName: "CISA_CVE_CRUD",
                     PARMS: {
                         "MODE": "SELECT"
                     }
                 }
-            } 
-            var json = JSON.stringify({ request: SprocRequestCollection });
+            }
+
+            var json = JSON.stringify({ requests: DataRequestDict });
             $.ajax({
                 url: `WebMethod1.aspx/SprocRequest`,
                 type: "POST",

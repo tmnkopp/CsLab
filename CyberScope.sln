@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberScope.CS.Lab", "CyberS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberScope.CS.Lab.Tests", "CyberScope.CS.Lab.Tests\CyberScope.CS.Lab.Tests.csproj", "{4A8959CF-D791-47A6-B55D-821A2286CC55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberScope.Automator", "CyberScope.Automator\CyberScope.Automator.csproj", "{DFA1D93B-0BA0-40CE-889A-4143665D2F3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CyberScope.Automator", "CyberScope.Automator\CyberScope.Automator.csproj", "{DFA1D93B-0BA0-40CE-889A-4143665D2F3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

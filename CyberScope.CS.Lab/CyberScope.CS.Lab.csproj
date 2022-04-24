@@ -78,7 +78,7 @@
     <Compile Include="Services\DataResponseService\DataResponseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataResponseService\DataTableResponse.cs" />
-    <Compile Include="Services\DataResponseService\DataTransformContext.cs" />
+    <Compile Include="Services\DataResponseService\ITransformData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\CyberBalance\trunk\projects\CyberBalance.CS.Core\CyberBalance.CS.Core.csproj">
