@@ -69,7 +69,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="CustomControls\CBCommandItemGrid.cs" />
     <Compile Include="CustomControls\CBForm.cs" />
     <Compile Include="CustomControls\CBGrid.cs" />
