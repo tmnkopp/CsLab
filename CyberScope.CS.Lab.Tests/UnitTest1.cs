@@ -1,8 +1,10 @@
 ﻿using CyberBalance.VB.Core;
 using CyberBalance.VB.Web.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
  
+using System;
+using System.Collections.Generic;
+
 namespace CyberScope.CS.Lab.Tests
 {
  
@@ -12,7 +14,7 @@ namespace CyberScope.CS.Lab.Tests
         [TestMethod]
         public void Automator_Inits()
         {
-            //CyberScope.Automator.CsDriverService ds = new
+     
         }
 
         [TestMethod]
