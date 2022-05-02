@@ -2,20 +2,47 @@
 Imports CyberBalance.CS.Core
 Imports CyberBalance.VB.Core
 Imports CyberBalance.VB.Web.UI
+Imports Newtonsoft.Json
+
 Public Class WebMethod1
     Inherits System.Web.UI.Page
+
+    ' Simple Request
     <WebMethod()>
     Public Shared Function SprocRequest(requests As Dictionary(Of String, DataRequest))
         Dim _CAUser As CAuser, _UrlParams As URLParms
         CBWebBase.Init(_CAUser, _UrlParams)
 
-        Dim response = New DataResponseService() _
+        Dim JsonDictOfDataTables = New DataResponseService() _
             .SetUser(_CAUser) _
             .ApplyRequest(requests) _
             .ApplyUrlEncryption(_UrlParams) _
             .GetResponse()
 
-        Return response
+        Return JsonDictOfDataTables
+
+    End Function
+
+    'If you need to access the data
+    <WebMethod()>
+    Public Shared Function SprocRequest2(requests As Dictionary(Of String, DataRequest))
+        Dim _CAUser As CAuser, _UrlParams As URLParms
+        CBWebBase.Init(_CAUser, _UrlParams)
+
+        Dim DictOfDataTables As Dictionary(Of String, DataTable) = New DataResponseService() _
+            .SetUser(_CAUser) _
+            .ApplyRequest(requests) _
+            .ApplyUrlEncryption(_UrlParams) _
+            .GetDataTables()
+
+        For Each kv As KeyValuePair(Of String, DataTable) In DictOfDataTables
+            Dim dataTable = DictOfDataTables(kv.Key)
+            For Each dataRow As DataRow In dataTable.Rows
+                'do stuff to data
+            Next
+        Next
+        Dim JsonDictOfDataTables = JsonConvert.SerializeObject(DictOfDataTables)
+        Return DictOfDataTables
 
     End Function
 End Class
