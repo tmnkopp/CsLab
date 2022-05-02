@@ -73,11 +73,7 @@
     <Compile Include="CustomControls\CBForm.cs" />
     <Compile Include="CustomControls\CBGrid.cs" />
     <Compile Include="CustomControls\CBMultiAnswerGrid.cs" />
-    <Compile Include="Services\DataResponseService\DataRequest.cs" />
-    <Compile Include="Services\DataResponseService\DataResponseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DataResponseService\DataTableResponse.cs" />
-    <Compile Include="Services\DataResponseService\ITransformData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\CyberBalance\trunk\projects\CyberBalance.CS.Core\CyberBalance.CS.Core.csproj">
@@ -101,6 +97,8 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,7 +1,7 @@
 ﻿Imports System.Web.Services
+Imports CyberBalance.CS.Core
 Imports CyberBalance.VB.Core
 Imports CyberBalance.VB.Web.UI
-Imports CyberScope.CS.Lab.Services
 Public Class WebMethod1
     Inherits System.Web.UI.Page
     <WebMethod()>
