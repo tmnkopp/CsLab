@@ -13,8 +13,8 @@
         function postData() {
             var myViewModel = {
                 Foo: "myFoo",
-                Bar: "myBar",
-                Baz: "myBaz"
+                Bar: 23,
+                Baz: ""
             }
             var json = JSON.stringify({ viewModel: myViewModel });
 
