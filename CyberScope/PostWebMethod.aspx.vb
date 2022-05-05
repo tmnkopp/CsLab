@@ -1,6 +1,6 @@
 ﻿Imports System.ComponentModel.DataAnnotations
 Imports System.Web.Services
-Imports CyberScope.CS.Lab
+Imports CyberBalance.CS.Core
 Imports Newtonsoft.Json
 Public Class PostWebMethod
     Inherits System.Web.UI.Page
