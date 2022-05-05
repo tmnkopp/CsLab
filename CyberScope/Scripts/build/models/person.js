@@ -22,7 +22,7 @@ var Person = /*#__PURE__*/function () {
   _createClass(Person, [{
     key: "speak",
     value: function speak() {
-      console.log("Hi I'm ".concat(this.name, " and ").concat(this.age, " years old and I am awesome"));
+      console.log("Hi I'm ".concat(this.name, " and ").concat(this.age, " years old"));
     }
   }]);
 

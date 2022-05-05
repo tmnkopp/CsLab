@@ -5,7 +5,7 @@ export default class Person {
     } 
     speak() {
       console.log(
-        `Hi I'm ${this.name} and ${this.age} years old and I am awesome`
+        `Hi I'm ${this.name} and ${this.age} years old`
       )
     }
   }
