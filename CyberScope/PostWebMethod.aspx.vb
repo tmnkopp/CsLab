@@ -7,9 +7,9 @@ Public Class PostWebMethod
     <WebMethod()>
     Public Shared Function PostData(viewModel As MyViewModel)
         'do stuff with viewModel 
-        CSModelState.Validate(viewModel)
-        If Not CSModelState.IsValid() Then
-            Dim errorList = CSModelState.Errors
+        CBModelState.Validate(viewModel)
+        If Not CBModelState.IsValid() Then
+            Dim errorList = CBModelState.Errors
             Dim response = New With {Key .viewModel = viewModel, Key .errors = errorList}
             Return JsonConvert.SerializeObject(response)
         End If
