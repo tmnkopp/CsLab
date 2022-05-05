@@ -1,12 +1,19 @@
 ﻿Imports System.Net
 Imports System.Web.Http
 Imports System.Web.Script.Serialization
+Imports CyberBalance.VB.Core
+Imports CyberBalance.VB.Web.UI
 Imports Newtonsoft.Json.Linq
 
 Public Class ValuesController
     Inherits ApiController
     Dim dictionary As New Dictionary(Of String, String)
+    Dim _CAUser As CAuser, _UrlParams As URLParms
     ' GET api/<controller>
+    Public Sub ApiController()
+        CBWebBase.Init(_CAUser, _UrlParams)
+    End Sub
+
     <HttpGet>
     <Route("api/values")>
     Public Function GetValues()

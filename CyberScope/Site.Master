@@ -51,8 +51,7 @@
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/">Home</a></li>
                         <li><a runat="server" href="~/WebMethod1">WebMethod</a></li>
-                        <li><a runat="server" href="~/CBGTTGrid2">CBGTTGrid2</a></li>
-                        <li><a runat="server" href="~/CBGrid">CBGrid</a></li>
+                        <li><a runat="server" href="~/CBGTTGrid2">CBGTTGrid2</a></li> 
                         <li><a runat="server" href="~/Grid">Grid</a></li> 
                     </ul>
                 </div>

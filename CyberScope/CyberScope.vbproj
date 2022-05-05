@@ -178,7 +178,6 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CBGrid.aspx" />
     <Content Include="CBGTTGrid2.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -240,13 +239,6 @@
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
     <Compile Include="App_Start\WebApiConfig.vb" />
-    <Compile Include="CBGrid.aspx.designer.vb">
-      <DependentUpon>CBGrid.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="CBGrid.aspx.vb">
-      <DependentUpon>CBGrid.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
     <Compile Include="CBGTTGrid2.aspx.designer.vb">
       <DependentUpon>CBGTTGrid2.aspx</DependentUpon>
     </Compile>

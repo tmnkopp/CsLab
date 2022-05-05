@@ -10,10 +10,11 @@ Public Class PostWebMethod
         CSModelState.Validate(viewModel)
         If Not CSModelState.IsValid() Then
             Dim errorList = CSModelState.Errors
-            Return JsonConvert.SerializeObject(New With {Key .Errors = errorList})
+            Dim response = New With {Key .viewModel = viewModel, Key .errors = errorList}
+            Return JsonConvert.SerializeObject(response)
         End If
-        viewModel.Foo = "i did stuff with a view model"
-        Return JsonConvert.SerializeObject(viewModel)
+        viewModel.Foo = "i did stuff"
+        Return JsonConvert.SerializeObject(New With {Key .viewModel = viewModel, Key .errors = Nothing})
     End Function
 End Class
 
@@ -22,7 +23,7 @@ Public Class MyViewModel
     Public Property Foo() As String
     <Required(ErrorMessage:="Bar is required")>
     <Range(1, 100, ErrorMessage:="Bar range valid between 1 and 100")>
-    Public Property Bar() As Integer
+    Public Property Bar() As Integer = 0
     Public Property Baz() As String
 End Class
 

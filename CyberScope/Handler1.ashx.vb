@@ -1,13 +1,14 @@
 ﻿Imports System.Web
 Imports System.Web.Services
+Imports Newtonsoft.Json
 
 Public Class Handler1
     Implements System.Web.IHttpHandler
 
     Sub ProcessRequest(ByVal context As HttpContext) Implements IHttpHandler.ProcessRequest
 
-        context.Response.ContentType = "text/plain"
-        context.Response.Write("Hello World!")
+        context.Response.ContentType = "application/json"
+        context.Response.Write(JsonConvert.SerializeObject(New With {Key .response = "Response"}))
 
     End Sub
 
