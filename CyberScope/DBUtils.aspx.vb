@@ -4,12 +4,12 @@ Imports CyberBalance.VB.Core
 Imports CyberBalance.VB.Web.UI
 Imports Newtonsoft.Json
 
-Public Class WebMethod1
+Public Class DBUtils
     Inherits System.Web.UI.Page
 
     ' Simple Request
     <WebMethod()>
-    Public Shared Function SprocRequest(requests As Dictionary(Of String, DataRequest))
+    Public Shared Function GetDataTables(requests As Dictionary(Of String, DataRequest))
         Dim _CAUser As CAuser, _UrlParams As URLParms
         CBWebBase.Init(_CAUser, _UrlParams)
 

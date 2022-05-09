@@ -11,5 +11,5 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class WebMethod1
+Partial Public Class DBUtils
 End Class
