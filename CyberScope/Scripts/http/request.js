@@ -20,7 +20,11 @@ export const GetDataAsync = async (request) => {
     let uri = `DBUtils.aspx/GetDataTables`;
     return RequestAsync(request, uri);
 }
-
+export const ExportDataAsync = async (request) => {
+    request = { requests: request };
+    let uri = `DBUtils.aspx/Export`;
+    return RequestAsync(request, uri);
+}
 export const PostRequestAsync = async (request, uri) => {
     return await new Promise((resolve, reject) => {
         $.ajax({

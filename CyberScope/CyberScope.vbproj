@@ -343,6 +343,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="CustomControls\" />
     <Folder Include="Pages\" />
     <Folder Include="Scripts\build\" />
     <Folder Include="Scripts\src\models\" />

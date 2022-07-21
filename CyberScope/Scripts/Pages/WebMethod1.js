@@ -1,4 +1,4 @@
-﻿import { RequestAsync, GetDataAsync } from '../http/request.js';
+﻿import { RequestAsync, GetDataAsync, ExportDataAsync } from '../http/request.js';
 var DataRequestDict = {
     "CISA_CVE_CRUD_SEL": {
         SprocName: "CISA_CVE_CRUD",
@@ -13,7 +13,7 @@ var DataRequestDict = {
     }
 }
 
-GetDataAsync(DataRequestDict).then(r => {
+ExportDataAsync(DataRequestDict).then(r => {
     console.log(r);
 });
 

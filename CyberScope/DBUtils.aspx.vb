@@ -2,6 +2,7 @@
 Imports CyberBalance.CS.Core
 Imports CyberBalance.VB.Core
 Imports CyberBalance.VB.Web.UI
+Imports CyberScope.CS.Lab
 Imports Newtonsoft.Json
 
 Public Class DBUtils
@@ -35,16 +36,31 @@ Public Class DBUtils
             .ApplyUrlEncryption(_UrlParams) _
             .GetDataTables()
 
+
         For Each kv As KeyValuePair(Of String, DataTable) In DictOfDataTables
             Dim dataTable = DictOfDataTables(kv.Key)
-            For Each dataRow As DataRow In dataTable.Rows
-                'do stuff to data
-            Next
+
         Next
+
         Dim JsonDictOfDataTables = JsonConvert.SerializeObject(DictOfDataTables)
         Return DictOfDataTables
 
     End Function
+    'If you need to access the data
+    <WebMethod()>
+    Public Shared Sub Export(requests As Dictionary(Of String, DataRequest))
+        Dim _CAUser As CAuser, _UrlParams As URLParms
+        CBWebBase.Init(_CAUser, _UrlParams)
+
+        Dim DictOfDataTables As Dictionary(Of String, DataTable) = New DataResponseService() _
+            .SetUser(_CAUser) _
+            .ApplyRequest(requests) _
+            .ApplyUrlEncryption(_UrlParams) _
+            .GetDataTables()
+
+
+
+    End Sub
 End Class
 
 
