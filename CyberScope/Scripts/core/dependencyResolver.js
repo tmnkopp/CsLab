@@ -11,9 +11,9 @@ export default class DependancyResolver {
             const row_qd_question = $('tr#' + d.question);
  
             const val = this.get_metric_row_value(row_qd_question_master);
-            if (d.question.indexOf('7_6_2') > -1) {
+            // if (d.question.indexOf('7_6_2') > -1) {
                 //  console.log(d.question + ' : ' + d.questionMaster + ' : ' + val);
-            }
+            // }
             if (val != null) { 
                 const reg = new RegExp(d.valueToRequire, 'gi');// gets expression from data-value_torequire attribute
           
@@ -36,9 +36,9 @@ export default class DependancyResolver {
         let row = $('#' + rowId);
        
         let inputsToReset = $(row).find($('.RadComboBox, input[type="radio"]:checked, input[type="checkbox"]:checked, select, textarea'));
-        if (rowId.indexOf('7_6_2') > -1 || rowId.indexOf('7_6_1') > -1 ) {
+        // if (rowId.indexOf('7_6_2') > -1 || rowId.indexOf('7_6_1') > -1 ) {
             //console.log(inputsToReset);
-        }
+        // }
         for (let i = 0; i < inputsToReset.length; i++) {
             let id = $(inputsToReset[i]).prop('id');
             id = this.stripScript(id);
@@ -124,7 +124,7 @@ export default class DependancyResolver {
         return deps;
     };
     get_metric_row_value(row_elm) {
-        let eles = row_elm.find($('input[type="text"]:not([readonly]), .RadComboBox, input[type="radio"]:checked, input[type="checkbox"]:checked, select'));
+        let eles = row_elm.find($('input[type="text"]:not([readonly]), .RadComboBox, .RadCheckBoxList, input[type="radio"]:checked, input[type="checkbox"]:checked, select'));
         //we are in EDIT MODE. Get the value from the control
         //if ($(row_elm).prop('id').indexOf('7_6_1') > -1) {
         //    console.log(eles[0]);
@@ -142,6 +142,14 @@ export default class DependancyResolver {
                     ret += c._text+','; 
                 });
                 return ret; 
+            };
+            if (eles[i].className.indexOf('RadCheckBoxList') > -1) {
+                let ret = '';
+                let ddl = $telerik.$("#" + attrId).get(0).control;
+                ddl.get_selectedItems().forEach(function (c) {
+                    ret += c.get_text() + ','; 
+                }); 
+                return ret;
             };
             //if ($(row_elm).prop('id').indexOf('7_6_1') > -1) {
             //    console.log(attrValue);
