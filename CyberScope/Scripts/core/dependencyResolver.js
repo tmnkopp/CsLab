@@ -8,15 +8,15 @@ export default class DependancyResolver {
         this.dependencies.forEach(d => {
  
             const row_qd_question_master = $('tr#' + d.questionMaster);
-            const row_qd_question = $('tr#' + d.question);
- 
-            const val = this.get_metric_row_value(row_qd_question_master);
-            // if (d.question.indexOf('7_6_2') > -1) {
-                //  console.log(d.question + ' : ' + d.questionMaster + ' : ' + val);
-            // }
+            const row_qd_question = $('tr#' + d.question); 
+            let val = this.get_metric_row_value(row_qd_question_master); 
+            //if (d.question.indexOf('5') > -1) {  console.log(val);  }
             if (val != null) { 
-                const reg = new RegExp(d.valueToRequire, 'gi');// gets expression from data-value_torequire attribute
-          
+                // if (d.question.indexOf('3_1_1') > -1) {
+                //     console.log(d.question + '\n' + d.questionMaster + '\n' + val);
+                // }
+                const reg = new RegExp(d.valueToRequire, 'gi'); // gets expression from data-value_torequire attribute
+       
                 if (reg.test(val)) {
                     $(row_qd_question).show();
                 } else {
@@ -70,9 +70,7 @@ export default class DependancyResolver {
                 ischeck = true; 
             };
             if (ischeck) {
-                if (row.prop('id').indexOf('7_6_') > -1) {
-                    //console.log($(inputsToReset[i]));
-                }
+                //  if (row.prop('id').indexOf('7_6_') > -1) { }
                 return;
             }
 
@@ -126,9 +124,7 @@ export default class DependancyResolver {
     get_metric_row_value(row_elm) {
         let eles = row_elm.find($('input[type="text"]:not([readonly]), .RadComboBox, .RadCheckBoxList, input[type="radio"]:checked, input[type="checkbox"]:checked, select'));
         //we are in EDIT MODE. Get the value from the control
-        //if ($(row_elm).prop('id').indexOf('7_6_1') > -1) {
-        //    console.log(eles[0]);
-        //}
+
         for (let i = 0; i < eles.length; i++) {
             let attrValue = $(eles[i]).prop('value');
             attrValue = this.stripScript(attrValue);
@@ -141,6 +137,7 @@ export default class DependancyResolver {
                 ddl.get_checkedItems().forEach(function (c) {
                     ret += c._text+','; 
                 });
+                ret = `,${ret}`;
                 return ret; 
             };
             if (eles[i].className.indexOf('RadCheckBoxList') > -1) {
@@ -148,7 +145,8 @@ export default class DependancyResolver {
                 let ddl = $telerik.$("#" + attrId).get(0).control;
                 ddl.get_selectedItems().forEach(function (c) {
                     ret += c.get_text() + ','; 
-                }); 
+                });
+                ret = `,${ret}`;
                 return ret;
             };
             //if ($(row_elm).prop('id').indexOf('7_6_1') > -1) {
@@ -158,27 +156,29 @@ export default class DependancyResolver {
                 return attrValue;
             };
         };
-       
+         
         // we are in READ MODE. Scrape the value from the html
         eles = row_elm.find($('*[class*="ControlColumn"]'));
         let hasInnerSpanTag = eles.find('span').length > 0
         if (hasInnerSpanTag) {
             eles = eles.find('span');
         }
+ 
         if (eles.length > 0) { 
             let isMULTI = row_elm.attr('class').indexOf('ct_MULTICHECKBOX') > -1;
             let isPICK = row_elm.attr('class').indexOf('ct_PICK') > -1;
             let isYN = row_elm.attr('class').indexOf('ct_YN') > -1;
-            
-            let elemval = eles[0].innerHTML.trim();
-            //console.log(elemval);
-
+     
+            let elemval = eles[0].innerHTML.trim(); 
+             
             if (isMULTI || isPICK) {
                 let selectedValues = elemval.split('<br>');
-                let defaultValues = elemval.split(' / ');
+                let defaultValues = elemval.split(' / '); 
                 if (defaultValues.length > 1 && selectedValues.length < 2) {
                     return '~no_selection~';
-                } 
+                }
+                elemval = elemval.split('<br>').join(',');
+                elemval = `,${elemval}`;
                 return elemval;
             } 
             return elemval;
