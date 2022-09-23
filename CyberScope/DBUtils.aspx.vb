@@ -2,65 +2,27 @@
 Imports CyberBalance.CS.Core
 Imports CyberBalance.VB.Core
 Imports CyberBalance.VB.Web.UI
+Imports CyberScope.CS
 Imports CyberScope.CS.Lab
 Imports Newtonsoft.Json
 
 Public Class DBUtils
     Inherits System.Web.UI.Page
-
-    ' Simple Request
     <WebMethod()>
-    Public Shared Function GetDataTables(requests As Dictionary(Of String, DataRequest))
+    Public Shared Function GetDataTable(request As SprocRequest)
+        request.SprocName = "spResponse"
+
         Dim _CAUser As CAuser, _UrlParams As URLParms
         CBWebBase.Init(_CAUser, _UrlParams)
 
-        Dim JsonDictOfDataTables = New DataResponseService() _
-            .SetUser(_CAUser) _
-            .ApplyRequest(requests) _
-            .ApplyUrlEncryption(_UrlParams) _
-            .GetResponse()
+        Dim oDb = New DataBaseUtils2()
+        oDb.Parms = request.SprocParms
+        Dim dt = oDb.GetDataTable(request.SprocName)
 
-        Return JsonDictOfDataTables
+        Return JsonConvert.SerializeObject(dt)
 
     End Function
 
-    'If you need to access the data
-    <WebMethod()>
-    Public Shared Function SprocRequest2(requests As Dictionary(Of String, DataRequest))
-        Dim _CAUser As CAuser, _UrlParams As URLParms
-        CBWebBase.Init(_CAUser, _UrlParams)
-
-        Dim DictOfDataTables As Dictionary(Of String, DataTable) = New DataResponseService() _
-            .SetUser(_CAUser) _
-            .ApplyRequest(requests) _
-            .ApplyUrlEncryption(_UrlParams) _
-            .GetDataTables()
-
-
-        For Each kv As KeyValuePair(Of String, DataTable) In DictOfDataTables
-            Dim dataTable = DictOfDataTables(kv.Key)
-
-        Next
-
-        Dim JsonDictOfDataTables = JsonConvert.SerializeObject(DictOfDataTables)
-        Return DictOfDataTables
-
-    End Function
-    'If you need to access the data
-    <WebMethod()>
-    Public Shared Sub Export(requests As Dictionary(Of String, DataRequest))
-        Dim _CAUser As CAuser, _UrlParams As URLParms
-        CBWebBase.Init(_CAUser, _UrlParams)
-
-        Dim DictOfDataTables As Dictionary(Of String, DataTable) = New DataResponseService() _
-            .SetUser(_CAUser) _
-            .ApplyRequest(requests) _
-            .ApplyUrlEncryption(_UrlParams) _
-            .GetDataTables()
-
-
-
-    End Sub
 End Class
 
 

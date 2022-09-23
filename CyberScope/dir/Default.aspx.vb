@@ -1,31 +1,17 @@
-﻿
-Imports CyberBalance.CS.Core
+﻿Imports CyberBalance.CS.Core
 Imports CyberBalance.VB.Core
 Imports CyberBalance.VB.Web.UI
 Imports CyberScope.CS.Lab
 Imports CyberScope.CS.Web.UI
-
-Public Class _Default
-    Inherits Page
+Public Class _Default1
+    Inherits System.Web.UI.Page
     Dim oDb As DataBaseUtils2 = New DataBaseUtils2()
-    Protected Overrides Sub OnInit(ByVal e As System.EventArgs)
-        MyBase.OnInit(e)
-    End Sub
-    Protected Overrides Sub OnLoad(ByVal e As System.EventArgs)
+    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Dim _CAUser As CAuser, _UrlParams As URLParms
         CBWebBase.Init(_CAUser, _UrlParams)
-
-        Dim requests = New Dictionary(Of String, SprocRequest)
-
-        Dim dr = New SprocRequest("BOD_CDM_CRUD")
-        dr.PARMS.Add("MODE", "EXPORT")
-        requests.Add("BOD_CDM_CRUD_EXPORT", dr)
-
-        dr = New SprocRequest("BOD_CDM_CRUD")
-        dr.PARMS.Add("MODE", "ddlYN")
-        requests.Add("BOD_CDM_CRUD_ddlYN", dr)
-
-
+        Dim clean = _UrlParams.ParmStringClear
+        link.NavigateUrl = _UrlParams.EncryptURL("Default.aspx?PK_ReportingCycle_Component=9999")
+        link.Text = link.NavigateUrl
     End Sub
     Protected Overrides Sub OnPreInit(ByVal e As System.EventArgs)
         MyBase.OnPreInit(e)

@@ -1,4 +1,10 @@
-﻿export const RequestAsync = async (request, uri) => { 
+﻿
+export const RequestAsync = async (request) => {
+    request.queryString = ParamService.GetParam('CSAM');
+    request.referrer = window.location.href;
+    const uri = request.resource;
+    request = { request: request };
+    console.debug(request);  
     return await new Promise((resolve, reject) => { 
         $.ajax({
             url: uri,
@@ -10,36 +16,19 @@
                 const _json = JSON.parse(response.d); 
                 resolve(_json);
             },
-            failure: (response) => console.log(response.d),
-            error: (response) => console.log(response.d)
+            failure: (response) => reject(response),
+            error: (response) => reject(response)
         });
     });
+} 
+export class ParamService {  
+    static GetParam(name) {
+        let url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }  
 }
-export const GetDataAsync = async (request) => {
-    request = { requests: request };
-    let uri = `DBUtils.aspx/GetDataTables`;
-    return RequestAsync(request, uri);
-}
-export const ExportDataAsync = async (request) => {
-    request = { requests: request };
-    let uri = `DBUtils.aspx/Export`;
-    return RequestAsync(request, uri);
-}
-export const PostRequestAsync = async (request, uri) => {
-    return await new Promise((resolve, reject) => {
-        $.ajax({
-            url: uri,
-            type: "POST",
-            data: JSON.stringify(request),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: (response) => {
-                const _json = JSON.parse(response.d);
-                resolve(_json);
-            },
-            failure: (response) => console.log(response.d),
-            error: (response) => console.log(response.d)
-        });
-    });
-}
-

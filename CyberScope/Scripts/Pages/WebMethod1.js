@@ -1,20 +1,17 @@
-﻿import { RequestAsync, GetDataAsync, ExportDataAsync } from '../http/request.js';
-var DataRequestDict = {
-    "CISA_CVE_CRUD_SEL": {
-        SprocName: "CISA_CVE_CRUD",
-        PARMS: {
-            "MODE": "SELECT"
-        }
-    }, "CISA_CVE_CRUD_EXP": {
-        SprocName: "CISA_CVE_CRUD",
-        PARMS: {
-            "MODE": "EXPORT"
-        }
-    }
-}
-
-ExportDataAsync(DataRequestDict).then(r => {
-    console.log(r);
+﻿import { RequestAsync } from '../http/request.js';
+import { Environment } from '../core/utils.js';
+ 
+const request = {
+    resource: `${Environment.GetBaseUrl()}DBUtils.aspx/GetDataTable`,
+    parms: { PK_FORM: '2022-Q4-CIO' }
+} 
+ 
+RequestAsync(request).then(data => {
+    //console.log(data); 
+    return RequestAsync(request);
+}).then(data => {
+    console.log(data); 
 });
 
+ 
  
