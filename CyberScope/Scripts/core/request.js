@@ -32,3 +32,12 @@ export class ParamService {
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }  
 }
+export class Environment {
+    static GetBaseUrl() {
+        let host = window.location.host;
+        if (host.indexOf('dayman') > -1) {
+            return '/CyberScopeBranch/';
+        }
+        return '/';
+    }
+}

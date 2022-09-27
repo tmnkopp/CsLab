@@ -1,5 +1,4 @@
-﻿import { RequestAsync } from '../http/request.js';
-import { Environment } from '../core/utils.js';
+﻿import { RequestAsync, Environment } from '../http/request.js'; 
  
 const request = {
     resource: `${Environment.GetBaseUrl()}DBUtils.aspx/GetDataTable`,

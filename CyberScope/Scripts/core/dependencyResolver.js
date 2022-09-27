@@ -10,7 +10,7 @@ export default class DependancyResolver {
             const row_qd_question_master = $('tr#' + d.questionMaster);
             const row_qd_question = $('tr#' + d.question); 
             let val = this.get_metric_row_value(row_qd_question_master); 
-            //if (d.question.indexOf('5') > -1) {  console.log(val);  }
+
             if (val != null) { 
                 // if (d.question.indexOf('3_1_1') > -1) {
                 //     console.log(d.question + '\n' + d.questionMaster + '\n' + val);
@@ -70,7 +70,7 @@ export default class DependancyResolver {
                 ischeck = true; 
             };
             if (ischeck) {
-                //  if (row.prop('id').indexOf('7_6_') > -1) { }
+                // if (row.prop('id').indexOf('7_6_') > -1) { }
                 return;
             }
 
@@ -124,7 +124,9 @@ export default class DependancyResolver {
     get_metric_row_value(row_elm) {
         let eles = row_elm.find($('input[type="text"]:not([readonly]), .RadComboBox, .RadCheckBoxList, input[type="radio"]:checked, input[type="checkbox"]:checked, select'));
         //we are in EDIT MODE. Get the value from the control
-
+        //if ($(row_elm).prop('id').indexOf('7_6_1') > -1) {
+        //    console.log(eles[0]);
+        //}
         for (let i = 0; i < eles.length; i++) {
             let attrValue = $(eles[i]).prop('value');
             attrValue = this.stripScript(attrValue);
@@ -163,14 +165,14 @@ export default class DependancyResolver {
         if (hasInnerSpanTag) {
             eles = eles.find('span');
         }
- 
         if (eles.length > 0) { 
             let isMULTI = row_elm.attr('class').indexOf('ct_MULTICHECKBOX') > -1;
             let isPICK = row_elm.attr('class').indexOf('ct_PICK') > -1;
             let isYN = row_elm.attr('class').indexOf('ct_YN') > -1;
      
-            let elemval = eles[0].innerHTML.trim(); 
-             
+            let elemval = eles[0].innerHTML.trim();
+            //console.log(elemval);
+
             if (isMULTI || isPICK) {
                 let selectedValues = elemval.split('<br>');
                 let defaultValues = elemval.split(' / '); 
