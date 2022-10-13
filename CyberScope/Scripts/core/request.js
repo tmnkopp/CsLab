@@ -2,7 +2,8 @@
 export const RequestAsync = async (request) => {
     request.queryString = ParamService.GetParam('CSAM');
     request.referrer = window.location.href;
-    const uri = request.resource;
+    let uri = request.resource;
+    uri = uri.replace('~', Environment.GetBaseUrl());
     request = { request: request };
     console.debug(request);  
     return await new Promise((resolve, reject) => { 
