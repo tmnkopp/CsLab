@@ -4,6 +4,8 @@
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
  
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+  
+    
      <script type="module" src='<%= ResolveUrl("~/Scripts/Pages/WebMethod1.js")%>'></script>
     <script>
    
