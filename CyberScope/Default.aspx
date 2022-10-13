@@ -7,9 +7,9 @@
   
     
      <script type="module" src='<%= ResolveUrl("~/Scripts/Pages/WebMethod1.js")%>'></script>
-    <script>
-   
-    </script>
+    <table id="grid">
+
+    </table>
     <%--  
    
     --%>
