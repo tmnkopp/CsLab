@@ -203,6 +203,7 @@
     <Content Include="Scripts\core\forms.js" />
     <Content Include="Scripts\core\request.js" />
     <Content Include="Scripts\core\utils.js" />
+    <Content Include="Scripts\csvgrid.js" />
     <Content Include="Scripts\jquery.csv.min.js" />
     <Content Include="Scripts\Pages\WebMethod1.js" />
     <Content Include="DBUtils.aspx" />

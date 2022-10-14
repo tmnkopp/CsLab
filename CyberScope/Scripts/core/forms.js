@@ -1,5 +1,16 @@
 ﻿import { RequestAsync } from './request.js'; 
- 
+
+/*
+const validator = new Validator({ target: ' form ' });
+$('#formsubmit').on({
+    click: async (e) => {
+        await validator.ValidateAsync().then(r => {
+            const isValid = validator.isValid;
+            $('#err').html(`isValid: ${isValid}<br> ${r.Errors.map(i => i.message).join('<br>')}`);
+        });
+    }
+}); 
+ */
 export class Validator {
     constructor({ target = 'form' } = {}) {
         this.target = target;
@@ -59,3 +70,61 @@ export class Validator {
         return $(o).val();
     }
 };
+
+export class DataBinder {
+    constructor({ target = 'form', data = {} } = {}) {
+        this.target = target;
+        this.data = data;
+    };
+    Bind() {
+        for (let [k, v] of Object.entries(this.data)) {
+            let o = $(`*[name='${k}']`);
+            if (typeof o !== 'undefined') {
+                this.setValue(o, v);
+            }
+        }
+    }
+    GetForm() {
+        for (let [k, v] of Object.entries(this.data)) {
+            let o = $(`*[name='${k}']`);
+            if (typeof o !== 'undefined') {
+                this.data[k] = this.getValue(o);
+            }
+        }
+        return this.data;
+    }
+    setValue(o, val) {
+        if ($(o).attr('type') == 'radio' && $(o).length > 1) {
+            for (let rad of $(o)) {
+                if ($(rad).val() == val) {
+                    $(rad).prop('checked', true);
+                    return;
+                }
+            }
+        }
+        if ($(o).attr('type') == 'checkbox') {
+            if ($(o).val() == val) {
+                $(o).prop('checked', true);
+                return;
+            }
+        }
+        if ($(o).prop('tagName') == 'SELECT') {
+            $(o).val(val);
+            return;
+        }
+        $(o).val(val);
+    }
+    getValue(o) {
+        if ($(o).attr('type') == 'radio') {
+            let name = $(o).attr('name');
+            let group = $(`input[name='${name}']:checked`)
+            let val = group.val();
+            return (group.length < 1) ? '' : val;
+        }
+        if ($(o).prop('tagName') == 'SELECT') {
+            let def = $(o).find(":selected").attr('default');
+            return (typeof def === 'undefined') ? $(o).val() : '';
+        }
+        return $(o).val();
+    }
+}
