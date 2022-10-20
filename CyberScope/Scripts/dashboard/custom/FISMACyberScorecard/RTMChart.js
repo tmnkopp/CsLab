@@ -12,23 +12,23 @@ export class RTMChart{
         this.data = {}; 
         this.OnSeriesClick = OnSeriesClick;
     }
-    render(data){
+    render(data) { 
         this.data=data;   
         $( this.container ).html(`
             <div class="col-4 rest"></div>
-            <div class="col-4 trans"></div>
+            <div class="col-4 transit"></div>
             <div class="col-4 mfa"></div>
         `);  
-        let dummydata = { "Q1Avg": 22, "Q2Avg": 50, "Q3Avg": 20, "Q4Avg": 10, "Q1SeriesName": "FY22 Q1", "Q2SeriesName": "FY22 Q2", "Q3SeriesName": "FY22 Q3", "Q4SeriesName": "FY22 Q4" }
+        //let dummydata = { "Q1Avg": 22, "Q2Avg": 50, "Q3Avg": 20, "Q4Avg": 10, "Q1SeriesName": "FY22 Q1", "Q2SeriesName": "FY22 Q2", "Q3SeriesName": "FY22 Q3", "Q4SeriesName": "FY22 Q4" }
         this.subplots.forEach((sp, i) => {
-            let data = this.data[i][0]; 
+            let data = this.data[i][0];
+            console.debug(data);
             sp.data = data;
             this._plotChart(sp); 
         });  
     }
     _plotChart(subplot) {
-        let OnSeriesClickArgs = {
-            type: subplot.type,
+        let OnSeriesClickArgs = { 
             subplot:subplot
         };
         const data = subplot.data;
@@ -36,22 +36,33 @@ export class RTMChart{
             chartArea: {  width: '360' },
             title: { text: subplot.title },
             legend: {  position: "bottom"  },
-            seriesDefaults: {   type: "column"  },
+            seriesDefaults: {
+                type: "column", 
+                labels: {
+                    visible: true,
+                    template: "#:value#%",
+                    background: "#fff",
+                    size: 30,
+                    border: {
+                        width: 2,
+                        color: "#bbb"
+                    }
+                }},
             series: [{
                 name: data.Q1SeriesName,
-                data: [data.Q1Avg],
+                data: [data.Q1Avg ?? 0],
                 color: "rgb(100, 143, 255)"
             }, {
                 name: data.Q2SeriesName,
-                data: [data.Q2Avg],
+                data: [data.Q2Avg ?? 0],
                 color: "rgb(195, 215, 255)"
             }, {
                 name: data.Q3SeriesName,
-                data: [data.Q3Avg],
+                data: [data.Q3Avg ?? 0],
                 color: "rgb(182, 182, 182)"
             }, {
                 name: data.Q4SeriesName,
-                data: [data.Q4Avg],
+                data: [data.Q4Avg ?? 0],
                 color: "rgb(255,165,0)"
                 }], seriesClick: (e) => {
                     OnSeriesClickArgs.e=e;
@@ -60,7 +71,7 @@ export class RTMChart{
             ,
             valueAxis: {
                 labels: {  format: "{0}%" },
-                line: { visible: false  },
+                line: { visible: true  },
                 axisCrossingValue: 0
             },
             categoryAxis: {
@@ -73,10 +84,15 @@ export class RTMChart{
 
 const RTMSeriesClick = (sender, args)=>{   
     let e = args.e;
+    let data = sender.data[3]; 
+    data = data.filter(i => i.QtrDesc?.toUpperCase() == e.series.name?.toUpperCase() && i.EncryptType?.toUpperCase() == args.subplot.type?.toUpperCase());
+    // console.debug( data );
     $("#modal").html('');
-    $(`<div></div>`).kendoGrid({
+    let caption = $(`div[for='${sender.container}'] .chartHead`).text(); 
+    $(`<h6>${caption} ${e.series.name}<h6><div class='mclose'><i class="fa fa-window-close" aria-hidden="true"></i></div>`).appendTo($("#modal"));
+    $(`<div class='mdata'></div>`).kendoGrid({
         dataSource: {
-            data: sender.data[3].filter(i => i.QtrDesc?.toUpperCase() == e.series.name.toUpperCase() && i.EncryptType?.toUpperCase() == args.type.toUpperCase())
+            data: data
         },
         scrollable: false,
         columns: [{
@@ -87,21 +103,13 @@ const RTMSeriesClick = (sender, args)=>{
             , title: "Calculation"
         }]
     }).appendTo($("#modal"));
-
-    $("#modal").kendoWindow({
-        actions: ["Maximize", "Close"],
-        draggable: true,
-        resizable: true,
-        width: "70%",
-        visible: false 
-    });
-    $("#modal").data("kendoWindow").center().open(); 
+    $("#modal").slideDown();  
 }
  
 export const LoadMFARestTrans = () => {
     let chart = new RTMChart({ container: '#chartMFARestTrans' });
     chart.subplots.push({ title: 'Average Data at Rest Encryption', type: 'rest' });
-    chart.subplots.push({ title: 'Average Data at Trans Encryption', type: 'trans' });
+    chart.subplots.push({ title: 'Average Data at Transit Encryption', type: 'transit' });
     chart.subplots.push({ title: 'Average Data at MFA Encryption', type: 'mfa' }); 
     chart.OnSeriesClick = RTMSeriesClick;
     RequestAsync({
@@ -115,7 +123,7 @@ export const LoadMFARestTrans = () => {
 export const LoadAvgMFAChart = () => {
     let chart = new RTMChart({ container: '#chartAvgMFA' });
     chart.subplots.push({ title: 'Average Data at Rest Encryption', type: 'rest' });
-    chart.subplots.push({ title: 'Average Data at Trans Encryption', type: 'trans' });
+    chart.subplots.push({ title: 'Average Data at Transit Encryption', type: 'transit' });
     chart.subplots.push({ title: 'Average Data at MFA Encryption', type: 'mfa' });
     chart.OnSeriesClick = RTMSeriesClick;
     RequestAsync({

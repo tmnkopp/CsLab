@@ -14,9 +14,38 @@ export const stripScript = (str) => {
         };
         return '';
     }
+} 
+export class PDFExporter {
+    constructor({ container = 'form', filename = document.title, wait = 1000} = {}  ){
+        this.container = container;
+        this.filename = filename;
+        this.wait = wait;
+    }
+    static ExportAsync = async ({ container = 'form', filename = document.title, wait = 1000 }) => {
+        return await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                kendo.drawing.drawDOM($(container))
+                    .then(function (group) {
+                        return kendo.drawing.exportPDF(group, {
+                            forcePageBreak: ".page-break",
+                            paperSize: "auto",
+                            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+                        });
+                    })
+                    .done(function (data) {
+                        kendo.saveAs({
+                            dataURI: data,
+                            fileName: filename,
+                        });
+                    });
+                resolve(true);
+            }, wait);
+        }) 
+    } 
+    _helper() { 
+         // _private function   to be implemented
+    }
 }
-
-
 export class Cookie {
     /*
     console.log(Cookie.Get('foo'));
