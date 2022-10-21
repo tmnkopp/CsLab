@@ -18,10 +18,10 @@ function LoadMFAHeatMapChart(data) {
     let dataset1 = data[0];
     let dataset2 = data[1];
 
-    var restVal = dataset2[0].Rest;
-    var transitVal = dataset2[0].Transit;
-    var mfaVal = dataset2[0].MFA;
-    LoadGauge(restVal, transitVal, mfaVal);
+    var restValOnload = dataset2[0].Rest;
+    var transitValOnload = dataset2[0].Transit;
+    var mfaValOnload = dataset2[0].MFA;
+    LoadGauge(restValOnload, transitValOnload, mfaValOnload);
 
     $("#chartMFAHeatMap").kendoGrid({
         dataBound: function (e) {
@@ -73,18 +73,30 @@ function LoadMFAHeatMapChart(data) {
             }
         },
         change: function () {
-            var gview = $("#chartMFAHeatMap").data("kendoGrid");
-            var selectedItem = gview.dataItem(gview.select());
-            var selRowRest = selectedItem.Rest;
-            var selRowTransit = selectedItem.Transit;
-            var selRowMFA = selectedItem.MFA;
-            LoadGauge(selRowRest, selRowTransit, selRowMFA);
+                var gview = $("#chartMFAHeatMap").data("kendoGrid");
+                var selected = $.map(this.select(), function (item) {
+                    return $(item);
+                });
+                console.log(selected);
+                //var selected = gview.select();
+                //console.log(selected);
+                LoadGauge(restValOnload, transitValOnload, mfaValOnload);
+                if (selected.length > 0) {
+                    if (selected[0].hasClass("k-selected")) {
+                        var selectedItem = gview.dataItem(gview.select());
+                        var selRowRest = selectedItem.Rest;
+                        var selRowTransit = selectedItem.Transit;
+                        var selRowMFA = selectedItem.MFA;
+                        LoadGauge(selRowRest, selRowTransit, selRowMFA);
+                    }
+                }
         },
         columnMenu: {
             height: 400,
             width: 450
         },
         selectable: true,
+        sortable:true,
         columns: [{
             field: "Acronym"
             , title: "Agency"

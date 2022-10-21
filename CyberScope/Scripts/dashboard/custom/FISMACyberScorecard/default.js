@@ -14,7 +14,7 @@ $(document).ready(() => {
         LoadMFAHeatMapData();
         LoadMFARestTrans();
         FilterChange();
-        document.title = 'FISMA Cybersecurity Scorecard';
+        document.title = result[3][0].ShortName;
     }); 
 }); 
 function Init(data) {
@@ -30,6 +30,7 @@ function Init(data) {
     $("select[id^='ddl']").change(() => FilterChange());  
     $("#modal").click(() => $("#modal").slideUp()).hide(); 
     $("#btnExport").click(() => ExportPDF())
+    $('#FullDescContainer').html(data[3][0].FullDescription)
 }
 function FilterChange() {
     $("#modal").slideUp();
@@ -40,7 +41,7 @@ function FilterChange() {
 function ExportPDF() {
     FilterChange();
     var d = new Date();
-    var strDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+    var strDate = (d.getMonth() + 1) + "/" + d.getDate() +"/" + d.getFullYear();
     var obj = $(".FISMACyberScorecard-wrapper");
     var official = "<p class=\"delete\" style=\"color:#ff0000; text-align:center; font-weight: bold\">Unclassified // For Official Use Only</p>";
     obj.prepend("<div class=\"row delete\" style=\"background-color:#112e51;color:white;padding:5px;margin-bottom:2px;\"><div class=\"col-md-3\" > <img class=\"navbar-brand\" src=\"../../../Images/dhs-lg_cyberscope.png\"  style=\"border-width:0px;height:100px; \" /></div ><div class=\"col-md-6\" style=\"color:white;\"><h2 style=\"display:table-cell;height:100px;vertical-align: middle;\">FISMA Cybersecurity Scorecard</h2></div><div class=\"col-md-3\"><span style=\"display:table-cell;height:100px;vertical-align: bottom;\">Date created: " + strDate + "</span></div></div >");
