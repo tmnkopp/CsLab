@@ -39,21 +39,19 @@ function FilterChange() {
 }
 function ExportPDF() {
     FilterChange();
-    $(".param-wrapper").hide(); 
     var d = new Date();
     var strDate = d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate();
-    var obj = $(".FISMACyberScorecard-wrapper"); 
+    var obj = $(".FISMACyberScorecard-wrapper");
     var official = "<p class=\"delete\" style=\"color:#ff0000; text-align:center; font-weight: bold\">Unclassified // For Official Use Only</p>";
     obj.prepend("<div class=\"row delete\" style=\"background-color:#112e51;color:white;padding:5px;margin-bottom:2px;\"><div class=\"col-md-3\" > <img class=\"navbar-brand\" src=\"../../../Images/dhs-lg_cyberscope.png\"  style=\"border-width:0px;height:100px; \" /></div ><div class=\"col-md-6\" style=\"color:white;\"><h2 style=\"display:table-cell;height:100px;vertical-align: middle;\">FISMA Cybersecurity Scorecard</h2></div><div class=\"col-md-3\"><span style=\"display:table-cell;height:100px;vertical-align: bottom;\">Date created: " + strDate + "</span></div></div >");
     obj.prepend(official);
-    obj.append(official);
-    $('.navbar, #btnExport').hide();
+    $('.navbar , #btnExport, .param-wrapper').hide();
     PDFExporter.ExportAsync({
-        container: '.FISMACyberScorecard-wrapper', filename:document.title, wait:200
-    }).then((result)=>{
+        container: 'body', filename: document.title, wait: 1200
+    }).then((result) => {
         console.log(result);
         $('.delete').remove();
-        $('.navbar, #btnExport').show();
+        $('.navbar, #btnExport, .param-wrapper').show();
     });
 }
  

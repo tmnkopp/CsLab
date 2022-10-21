@@ -16,12 +16,12 @@ export const stripScript = (str) => {
     }
 } 
 export class PDFExporter {
-    constructor({ container = 'form', filename = document.title, wait = 1000} = {}  ){
+    constructor({ container = 'form', filename = document.title, wait = 250} = {}  ){
         this.container = container;
         this.filename = filename;
         this.wait = wait;
     }
-    static ExportAsync = async ({ container = 'form', filename = document.title, wait = 1000 }) => {
+    static ExportAsync = async ({ container = 'form', filename = document.title, wait = 250 }) => {
         return await new Promise((resolve, reject) => {
             setTimeout(() => {
                 kendo.drawing.drawDOM($(container))
@@ -37,11 +37,11 @@ export class PDFExporter {
                             dataURI: data,
                             fileName: filename,
                         });
+                        resolve(true);
                     });
-                resolve(true);
             }, wait);
-        }) 
-    } 
+        })
+    }
     _helper() { 
          // _private function   to be implemented
     }
