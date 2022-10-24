@@ -10,8 +10,6 @@ Public Class DBUtils
     Inherits System.Web.UI.Page
     <WebMethod()>
     Public Shared Function GetDataTable(request As SprocRequest)
-        request.SprocName = "spResponse"
-
         Dim _CAUser As CAuser, _UrlParams As URLParms
         CBWebBase.Init(_CAUser, _UrlParams)
 

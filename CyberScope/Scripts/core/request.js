@@ -5,7 +5,7 @@ export const RequestAsync = async (request) => {
     let uri = request.resource;
     uri = uri.replace('~', Environment.GetBaseUrl());
     request = { request: request };
-    console.debug(request);  
+    console.log(request);  
     return await new Promise((resolve, reject) => { 
         $.ajax({
             url: uri,
@@ -15,7 +15,10 @@ export const RequestAsync = async (request) => {
             dataType: "json",
             success: (response) => {
                 const _json = JSON.parse(response.d); 
-                resolve(_json);
+                setTimeout(() => {
+                    resolve(_json);
+                }, 1500);
+                
             },
             failure: (response) => reject(response),
             error: (response) => reject(response)

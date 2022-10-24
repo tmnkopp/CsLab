@@ -199,12 +199,14 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Handler1.ashx" />
     <Content Include="PostWebMethod.aspx" />
+    <Content Include="Scripts\core\component.js" />
     <Content Include="Scripts\core\dependencyResolver.js" />
     <Content Include="Scripts\core\forms.js" />
     <Content Include="Scripts\core\request.js" />
     <Content Include="Scripts\core\utils.js" />
     <Content Include="Scripts\csvgrid.js" />
     <Content Include="Scripts\jquery.csv.min.js" />
+    <Content Include="Scripts\Pages\default.js" />
     <Content Include="Scripts\Pages\WebMethod1.js" />
     <Content Include="DBUtils.aspx" />
     <Content Include="package.json" />
@@ -358,6 +360,7 @@
     <Folder Include="CustomControls\" />
     <Folder Include="Pages\" />
     <Folder Include="Scripts\build\" />
+    <Folder Include="Scripts\components\" />
     <Folder Include="Scripts\http\" />
     <Folder Include="Scripts\src\models\" />
   </ItemGroup>
