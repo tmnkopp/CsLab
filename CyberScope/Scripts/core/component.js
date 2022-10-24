@@ -33,11 +33,7 @@ export class FooComponent extends CBComponent {
 
         `).insertBefore($(`${this.container}`));
 
-        let data = await RequestAsync({
-            resource: `~DBUtils.aspx/GetDataTable`,
-            SprocName: 'spPicklists',
-            params: {}
-        }).then(response => response);
+  
 
         data = data.reduce((r, i) => r.add(i.UsageField), new Set()); 
         data.forEach((r) => $('#soc').append(`<option value="${r}">${r}</option> `)); 
