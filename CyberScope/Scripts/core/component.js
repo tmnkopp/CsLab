@@ -3,21 +3,28 @@ class CBComponent {
     constructor({
         container = `form` 
     } = {}) {  
-        this.container = container; 
-        this._InitComplete = false; 
-        this.id = this.container.replace(/[^a-zA-Z]/g, "");
+        this.container = container;  
+        this.id = this.container.replace(/[^a-zA-Z]/g, ""); 
     }
     async Init() { 
-        if (typeof this._onInit === 'function' && !this._InitComplete ) {
-            await this._onInit();  
-        }  
-        this._InitComplete = true;
+        if (typeof this._onInit !== 'function' ) {
+            console.error(this.constructor.name + ' _onInit() undefined exception');
+            return;
+        }
+        return await new Promise(async (resolve) => {
+            const result = await this._onInit();
+            resolve(result);
+        });
     } 
-    async Render() { 
-        await this.Init();
-        if (typeof this._onRender === 'function') {
-            await this._onRender();
-        } else { console.error(this.constructor.name + ' Render() undefined exception') }   
+    async Render() {
+        if (typeof this._onRender !== 'function') {
+            console.error(this.constructor.name + ' _onRender undefined exception');
+            return;
+        }
+        return await new Promise(async (resolve) => {
+            const result = await this._onRender();
+            resolve(result);
+        });
     }
 }
 export class FooComponent extends CBComponent {
@@ -33,20 +40,26 @@ export class FooComponent extends CBComponent {
 
         `).insertBefore($(`${this.container}`));
 
-  
+        let data = await RequestAsync({
+            resource: `~DBUtils.aspx/GetDataTable`,
+            SprocName: 'spPicklists',
+            parms: { }
+        }).then(response => response);
 
-        data = data.reduce((r, i) => r.add(i.UsageField), new Set()); 
+        data = data.reduce((r, i) => r.add(i.UsageField), new Set());
+    
         data.forEach((r) => $('#soc').append(`<option value="${r}">${r}</option> `)); 
         $('#soc').change(() => this.Render());
     }
-    async _onRenders() {   
+    async _onRender() {   
         let data = await RequestAsync({
             resource: `~DBUtils.aspx/GetDataTable`,
             SprocName: 'spPicklists',
             parms: { UsageField: $('#soc').val() || '' }
-        }).then(response => response); 
+        }).then(response => response);
+        
         $(`
-            <div class="row">
+            <div>
                 ${JSON.stringify(data)}
             </div> 
         `).insertAfter($(`${this.container}`)); 

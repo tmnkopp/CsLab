@@ -1,4 +1,5 @@
 import { RequestAsync } from '../../../core/request.js';
+import { stripScript } from '../../../core/utils.js';
 export class RTMChart{
     constructor(
         {
@@ -21,8 +22,7 @@ export class RTMChart{
         `);  
         //let dummydata = { "Q1Avg": 22, "Q2Avg": 50, "Q3Avg": 20, "Q4Avg": 10, "Q1SeriesName": "FY22 Q1", "Q2SeriesName": "FY22 Q2", "Q3SeriesName": "FY22 Q3", "Q4SeriesName": "FY22 Q4" }
         this.subplots.forEach((sp, i) => {
-            let data = this.data[i][0];
-            console.debug(data);
+            let data = this.data[i][0]; 
             sp.data = data;
             this._plotChart(sp); 
         });  
@@ -86,10 +86,10 @@ const RTMSeriesClick = (sender, args)=>{
     let e = args.e;
     let data = sender.data[3]; 
     data = data.filter(i => i.QtrDesc?.toUpperCase() == e.series.name?.toUpperCase() && i.EncryptType?.toUpperCase() == args.subplot.type?.toUpperCase());
-    // console.debug( data );
+    // console.debug( data ); 
     $("#modal").html('');
     let caption = $(`div[for='${sender.container}'] .chartHead`).text(); 
-    $(`<h6>${caption} ${e.series.name}<h6><div class='mclose'><i class="fa fa-window-close" aria-hidden="true"></i></div>`).appendTo($("#modal"));
+    $(`<h6>${stripScript(caption)} ${e.series.name}<h6><div class='mclose'><i class="fa fa-window-close" aria-hidden="true"></i></div>`).appendTo($("#modal"));
     $(`<div class='mdata'></div>`).kendoGrid({
         dataSource: {
             data: data
@@ -113,7 +113,7 @@ export const LoadMFARestTrans = () => {
     chart.subplots.push({ title: 'Average Data at MFA Encryption', type: 'mfa' }); 
     chart.OnSeriesClick = RTMSeriesClick;
     RequestAsync({
-        resource: `Default.aspx/RequestMFARestTrans`,
+        resource: `Default.aspx/RequestMFARestTrans`, 
         parms: {
             rptcycle: $("#ddlReportingCycles_MFARestTrans").val()
             , MajAgency: $("#ddlAgencies_MFARestTrans").val()
@@ -128,6 +128,7 @@ export const LoadAvgMFAChart = () => {
     chart.OnSeriesClick = RTMSeriesClick;
     RequestAsync({
         resource: `Default.aspx/RequestAverageMFA`,
+        handler: `RequestAverageMFA`,
         parms: {
             rptcycle: $("#ddlReportingCycles_AvgMFA").val()
             , showcfoactagencies: $("#ddlYesNo_AvgMFA").val()

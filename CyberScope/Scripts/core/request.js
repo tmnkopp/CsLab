@@ -1,27 +1,37 @@
 ﻿
+import { stripScript } from './utils.js';
 export const RequestAsync = async (request) => {
     request.queryString = ParamService.GetParam('CSAM');
     request.referrer = window.location.href;
     let uri = request.resource;
     uri = uri.replace('~', Environment.GetBaseUrl());
     request = { request: request };
-    console.log(request);  
+    request = JSON.stringify(request);
+    request = stripScript(request);
     return await new Promise((resolve, reject) => { 
         $.ajax({
             url: uri,
             type: "POST",
-            data: JSON.stringify(request),
+            data: request,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: (response) => {
-                const _json = JSON.parse(response.d); 
-                setTimeout(() => {
-                    resolve(_json);
-                }, 1500);
-                
+                let _json = response.d;
+                _json = JSON.parse(_json);
+                _json = JSON.stringify(_json);
+                _json = stripScript(_json);
+                _json = JSON.parse(_json);
+                console.debug({ request: JSON.parse(request), response: _json });
+                resolve(_json);
             },
-            failure: (response) => reject(response),
-            error: (response) => reject(response)
+            failure: ((response) => {
+                console.error(response);
+                reject(stripScript(response));
+            }),
+            error: ((response) => {
+                console.error(response);
+                reject(stripScript(response));
+            })
         });
     });
 } 
