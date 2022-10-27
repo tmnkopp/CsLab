@@ -16,9 +16,9 @@ export class Validator {
     constructor({ target = 'form' } = {}) {
         this.target = target;
         this.isValid = true;
-        this.dataValidations = [];
-        this.handler = 'GetValidations'
+        this.dataValidations = []; 
         this.request = { resource: `~DBUtils.aspx/CbGet` };
+        this.request.handler = 'GetValidations';
         RequestAsync(this.request).then(result => this.dataValidations = result);
     };
     async ValidateAsync() { 

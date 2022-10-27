@@ -31,9 +31,12 @@ export class RTMChart{
         let OnSeriesClickArgs = { 
             subplot:subplot
         };
-        const data = subplot.data;
+        const data = subplot.data; 
+        let width = $(`${this.container} .${subplot.type}`).width(); 
+        width = width - (width / 100);
+       
         $(`${this.container} .${subplot.type}`).kendoChart({ 
-            chartArea: {  width: '360' },
+            chartArea: { width: width },
             title: { text: subplot.title },
             legend: {  position: "bottom"  },
             seriesDefaults: {
@@ -89,7 +92,10 @@ const RTMSeriesClick = (sender, args)=>{
     // console.debug( data ); 
     $("#modal").html('');
     let caption = $(`div[for='${sender.container}'] .chartHead`).text(); 
-    $(`<h6>${stripScript(caption)} ${e.series.name}<h6><div class='mclose'><i class="fa fa-window-close" aria-hidden="true"></i></div>`).appendTo($("#modal"));
+    $(`
+        <h6>${stripScript(caption)} ${e.series.name} ${args.subplot.type?.toUpperCase()}<h6>
+        <div class='mclose'><i class="fa fa-window-close" aria-hidden="true"></i></div>
+    `).appendTo($("#modal"));
     $(`<div class='mdata'></div>`).kendoGrid({
         dataSource: {
             data: data
@@ -106,33 +112,41 @@ const RTMSeriesClick = (sender, args)=>{
     $("#modal").slideDown();  
 }
  
-export const LoadMFARestTrans = () => {
+export const LoadMFARestTrans = async () => {
     let chart = new RTMChart({ container: '#chartMFARestTrans' });
     chart.subplots.push({ title: 'Average Data at Rest Encryption', type: 'rest' });
     chart.subplots.push({ title: 'Average Data at Transit Encryption', type: 'transit' });
     chart.subplots.push({ title: 'Average Data at MFA Encryption', type: 'mfa' }); 
     chart.OnSeriesClick = RTMSeriesClick;
-    RequestAsync({
-        resource: `Default.aspx/RequestMFARestTrans`, 
+    const data = await RequestAsync({
+        resource: `Default.aspx/RequestMFARestTrans`,
+        handler: `RequestMFARestTrans`,
         parms: {
             rptcycle: $("#ddlReportingCycles_MFARestTrans").val()
             , MajAgency: $("#ddlAgencies_MFARestTrans").val()
         }
-    }).then(data => chart.render(data));
+    }).then(data => data);
+
+    chart.render(data); 
+    $(window).resize(() => chart.render(data));
+
 }
-export const LoadAvgMFAChart = () => {
+export const LoadAvgMFAChart = async () => {
     let chart = new RTMChart({ container: '#chartAvgMFA' });
     chart.subplots.push({ title: 'Average Data at Rest Encryption', type: 'rest' });
     chart.subplots.push({ title: 'Average Data at Transit Encryption', type: 'transit' });
     chart.subplots.push({ title: 'Average Data at MFA Encryption', type: 'mfa' });
     chart.OnSeriesClick = RTMSeriesClick;
-    RequestAsync({
+    const data = await RequestAsync({
         resource: `Default.aspx/RequestAverageMFA`,
         handler: `RequestAverageMFA`,
         parms: {
             rptcycle: $("#ddlReportingCycles_AvgMFA").val()
             , showcfoactagencies: $("#ddlYesNo_AvgMFA").val()
         }
-    }).then(data => chart.render(data));
+    }).then(data => data);
+
+    chart.render(data);  
+    $(window).resize(() => chart.render(data));
 }
  

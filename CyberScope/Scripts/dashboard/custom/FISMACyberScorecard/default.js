@@ -21,21 +21,29 @@ function Init(data) {
     data[0].forEach(row => $(".ddlYesNo").append(`<option value=${row["DataValue"]}>${row["DataText"]}</option>`)); 
     data[1].forEach(row => $(".ddlReportingCycles").append(`<option value=${row["DataValue"]}>${row["DataText"]}</option>`));
     data[2].forEach(row => $(".ddlAgencies").append(`<option value=${row["DataValue"]}>${row["DataText"]}</option>`));
+
     $("#ddlReportingCycles_AvgMFA").change(() => LoadAvgMFAChart());
     $("#ddlYesNo_AvgMFA").change(() => LoadAvgMFAChart()); 
-    $("#ddlReportingCycles_MFAHeatMap").change(() => LoadMFAHeatMapData());
-    $("#ddlYesNo_MFAHeatMap").change(() => LoadMFAHeatMapData()); 
+    $("#ddlReportingCycles_AvgMFA").change(() => LoadMFAHeatMapData());
+    $("#ddlYesNo_AvgMFA").change(() => LoadMFAHeatMapData());
     $("#ddlReportingCycles_MFARestTrans").change(() => LoadMFARestTrans());
     $("#ddlAgencies_MFARestTrans").change(() => LoadMFARestTrans());
+
     $("select[id^='ddl']").change(() => FilterChange());  
     $("#modal").click(() => $("#modal").slideUp()).hide(); 
-    $("#btnExport").click(() => ExportPDF())
-    $('#FullDescContainer').html(data[3][0].FullDescription)
+    $("#btnExport").click(() => ExportPDF());
+    $('#FullDescContainer').html(data[3][0].FullDescription);
+
+    if ($('#ddlAgencies_MFARestTrans option').length == 1) {
+        $('#ddlAgencies_MFARestTrans').prop("disabled", true);
+        $('#ddlAgencies_MFARestTrans').addClass('disabled');
+    };
+    
 }
 function FilterChange() {
     $("#modal").slideUp();
     $("#AvgMFAHeader .postfix").html(`: ${$("#ddlReportingCycles_AvgMFA option:selected").text()} ${$("#ddlYesNo_AvgMFA option:selected").text()}`);
-    $("#MFAHeatMapHeader .postfix").html(`: ${$("#ddlReportingCycles_MFAHeatMap option:selected").text()} ${$("#ddlYesNo_MFAHeatMap option:selected").text()}`);
+    $("#MFAHeatMapHeader .postfix").html(`: ${$("#ddlReportingCycles_AvgMFA option:selected").text()} ${$("#ddlYesNo_AvgMFA option:selected").text()}`);
     $("#MFARestTransHeader .postfix").html(`: ${$("#ddlReportingCycles_MFARestTrans option:selected").text()} ${$("#ddlAgencies_MFARestTrans option:selected").text()}`);
 }
 function ExportPDF() {

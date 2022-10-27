@@ -19,8 +19,9 @@ $('#submitform').on({
 $('#getit').on({
     click: (e) => {
         const request = {
-            resource: `~DBUtils.aspx/GetDataTable`,
-            parms: { PK_FORM: '2022-Q4-CIO' }
+            resource: `~DBUtils.aspx/CbGet`,
+            handler:'GetPicklists',
+            parms: { UsageField: 'YN' }
         }
         RequestAsync(request).then(data => {
             //console.log(data); 

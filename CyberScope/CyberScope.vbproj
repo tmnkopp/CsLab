@@ -205,6 +205,9 @@
     <Content Include="Scripts\core\request.js" />
     <Content Include="Scripts\core\utils.js" />
     <Content Include="Scripts\csvgrid.js" />
+    <Content Include="Scripts\dashboard\custom\FISMACyberScorecard\default.js" />
+    <Content Include="Scripts\dashboard\custom\FISMACyberScorecard\MFAHeatMap.js" />
+    <Content Include="Scripts\dashboard\custom\FISMACyberScorecard\RTMChart.js" />
     <Content Include="Scripts\jquery.csv.min.js" />
     <Content Include="Scripts\Pages\default.js" />
     <Content Include="Scripts\Pages\WebMethod1.js" />
@@ -360,7 +363,6 @@
     <Folder Include="CustomControls\" />
     <Folder Include="Pages\" />
     <Folder Include="Scripts\build\" />
-    <Folder Include="Scripts\components\" />
     <Folder Include="Scripts\http\" />
     <Folder Include="Scripts\src\models\" />
   </ItemGroup>

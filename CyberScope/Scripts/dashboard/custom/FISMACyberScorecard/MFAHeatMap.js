@@ -5,8 +5,8 @@ export function LoadMFAHeatMapData() {
     let request = {
         resource: `Default.aspx/RequestMFAHeatMap`,
         parms: {
-            rptcycle: $("#ddlReportingCycles_MFAHeatMap").val()
-            , showcfoactagencies: $("#ddlYesNo_MFAHeatMap").val()
+            rptcycle: $("#ddlReportingCycles_AvgMFA").val()
+            , showcfoactagencies: $("#ddlYesNo_AvgMFA").val()
         }
     }
     RequestAsync(request).then(result => {
