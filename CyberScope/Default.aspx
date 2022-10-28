@@ -9,6 +9,7 @@
     <div id="foo">
 
     </div>
+    <cb-canvas></cb-canvas>
     <table id="grid">
 
     </table>
