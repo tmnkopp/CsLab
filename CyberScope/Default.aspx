@@ -13,7 +13,7 @@
     <table id="grid">
 
     </table>
-    <div style="height:200vh;"></div>
+    <div style="height:2vh;"></div>
     <input id="text1" type="text" name="name" value="" ><br /> 
     <textarea id="txt1" name="txt1"></textarea><br /> 
     <input type="radio" name="rad1" value="radfoo" id="radfoo"> 
