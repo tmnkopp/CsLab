@@ -16,6 +16,5 @@ $(document).ready(async () => {
     await foo.DataBind();
     await foo.Render();
     console.log(foo);
-
-
+    
 });

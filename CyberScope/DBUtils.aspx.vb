@@ -25,17 +25,18 @@ Public Class DBUtils
     End Function
 
     <WebMethod()>
-    Public Shared Function CbGet(request As SprocRequest)
+    Public Shared Function Picklist(request As SprocRequest)
         request = request.StripScript()
-        If String.IsNullOrWhiteSpace(request.Handler) Then
-            Throw New System.Exception("Request must supply a Handler.")
-        End If
-        request.MapSprocMeta()
         Dim _CAUser As CAuser, _UrlParams As URLParms
         CBWebBase.Init(_CAUser, _UrlParams)
+
         request.PARMS.Add("@UserId", _CAUser.UserPK.ToString())
-        Dim data = New SprocRequestService(request).MapResponse(Of String)(Function(ds) JsonConvert.SerializeObject(ds.Tables))
-        Return data.StripScript()
+        request.SprocName = "spPicklists"
+        Dim oDb = New DataBaseUtils2()
+        oDb.Parms = request.SprocParms
+        Dim dt = oDb.GetDataTable(request.SprocName)
+
+        Return JsonConvert.SerializeObject(dt).StripScript()
     End Function
 
     <WebMethod()>

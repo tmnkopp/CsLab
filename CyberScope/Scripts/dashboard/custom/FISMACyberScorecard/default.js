@@ -33,6 +33,8 @@ function Init(data) {
     $("#modal").click(() => $("#modal").slideUp()).hide(); 
     $("#btnExport").click(() => ExportPDF());
     $('#FullDescContainer').html(data[3][0].FullDescription);
+    $("#LoadAgencyAvg").click(() => LoadMFAHeatMapData());
+  
 
     if ($('#ddlAgencies_MFARestTrans option').length == 1) {
         $('#ddlAgencies_MFARestTrans').prop("disabled", true);
@@ -64,4 +66,7 @@ function ExportPDF() {
         $('.navbar, #btnExport, .param-wrapper').show();
     });
 }
+
+
+
  
