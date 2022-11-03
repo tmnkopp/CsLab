@@ -1,5 +1,5 @@
 import { RequestAsync } from '../../../core/request.js';
-import { stripScript } from '../../../core/utils.js';
+import { decodeHTML, stripScript } from '../../../core/utils.js';
 export class RTMChart{
     constructor(
         {
@@ -102,13 +102,14 @@ const RTMSeriesClick = (sender, args)=>{
         },
         scrollable: false,
         columns: [{
-            field: "identifier_text"
-            , title: "Metric"
+            field: "identifier_text" , title: "Metric"
         }, {
-            field: "Answer"
-            , title: "Calculation"
+            field: "Answer" , title: "Calculation"
         }]
     }).appendTo($("#modal"));
+    $('#modal td[role="gridcell"]').each((i, o) => {
+        o.innerHTML = decodeHTML(o.innerText);
+    })
     $("#modal").slideDown();  
 }
  

@@ -113,7 +113,13 @@ export const stripScript = (str) => {
         return '';
     } 
     return str;
-} 
+}
+export const decodeHTML = input => {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = input; 
+    const safeValue = stripScript(textarea.value);
+    return safeValue;
+}
 export class PDFExporter {
     constructor({ container = 'form', filename = document.title, wait = 250, options = {}} = {}  ){
         this.container = container;

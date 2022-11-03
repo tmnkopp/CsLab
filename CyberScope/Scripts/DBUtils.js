@@ -42,7 +42,7 @@ export class MyComponent extends CBComponent {
         return this;
     }
     async _Render(kwargs = {}) { 
-        let dt = new DataTable({ data: this._data });
+        let dt = new DataTable({ data: this._data.PickList });
         dt.to_html('#my-result'); 
         return this;
     }
@@ -69,6 +69,8 @@ export class ddlPicklist extends CBComponent {
         return this;
     }
     async _Render(kwargs = {}) {
+        console.log(this._data);
+        return; 
         const dt = new DataTable({ data: this._data });
         const ddlData = dt.distinct('UsageField', ['PK_PickListType', 'UsageField']);
         ddlData.to_array().forEach((i) => {
