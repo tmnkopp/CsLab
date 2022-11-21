@@ -10,6 +10,7 @@ using System;
 using System.Data.SqlClient;
 using System.Configuration;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace CyberScope.CS.Lab.Tests
 {
@@ -33,37 +34,15 @@ namespace CyberScope.CS.Lab.Tests
     {
         [TestMethod]
         public void Automator_Inits()
-        {
-            var sprocs = GetData(); 
-            var ser = JsonConvert.SerializeObject(sprocs);
-            var deser = JsonConvert.DeserializeObject<List<dynamic>>(ser);
- 
-            Console.Write(sprocs);
+        { 
+            var srs = new SprocRequestService(r=>{
+                r.SprocName = "spSprocMeta";
+                r.PARMS.Add("MODE", "GET");
+            });
+            var dt = srs.GetDataTable(); 
+            var ser = JsonConvert.SerializeObject(dt);
+           
+            Console.Write(ser);
         }  
-   
-
-        public static DataTable GetData(){
-            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["CAClientConnectionString"].ConnectionString);
-            conn.Open();
-            SqlCommand cmd;
-            try
-            { 
-                cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "spSprocMeta"; 
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                conn.Close();
-            }
-        } 
     }
 }

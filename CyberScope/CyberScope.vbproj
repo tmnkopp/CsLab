@@ -209,6 +209,7 @@
     <Content Include="Scripts\dashboard\custom\FISMACyberScorecard\MFAHeatMap.js" />
     <Content Include="Scripts\dashboard\custom\FISMACyberScorecard\RTMChart.js" />
     <Content Include="Scripts\jquery.csv.min.js" />
+    <Content Include="Scripts\Pages\DBUtils.js" />
     <Content Include="Scripts\Pages\default.js" />
     <Content Include="Scripts\Pages\WebMethod1.js" />
     <Content Include="DBUtils.aspx" />

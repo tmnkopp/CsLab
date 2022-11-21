@@ -1,20 +1,13 @@
-﻿import { FooComponent, DataTable } from '../core/component.js';
-
+﻿ 
+import { DataBinder } from '../core/forms.js';
 $(document).ready(async () => {
-      
-    const foo = new FooComponent({
-        container: 'div#foo',
-        onDataBinding: (sender, args) => {
-            sender.request.parms = { UsageField: sender.re_foo_picklist.val() } 
-        } 
-    });    
-    foo.onChange = (sender, args) => {
-        const { source } = args;
-        console.log(source);
-    }
-    await foo.Init(); 
-    await foo.DataBind();
-    await foo.Render();
-    console.log(foo);
+    let data = { 'foobar': '1111' };
+    const binder = new DataBinder({data:data});
+    binder.Bind();
+  
+ 
+    $('#submitform').on({
+        click: (e) => console.log(binder.GetFormVals())
+    })
     
 });

@@ -64,16 +64,23 @@ export class Validator {
 };
 
 export class DataBinder {
-    constructor({ container = 'form', data = {} } = {}) {
+    constructor({
+        container = 'form'
+        , data = {}
+        , bindableAttributes = ['data-bind', 'name', 'id']
+    } = {}) {
         this.container = container;
         this.data = data;
+        this.bindableAttributes = bindableAttributes
     };
     Bind() {
-        for (let [k, v] of Object.entries(this.data)) { 
-            let o = $(`*[name='${stripScript(k)}']`);
-            if (typeof o !== 'undefined') {
-                FormUtils.setValue(o, v); 
-            }
+        for (let [k, v] of Object.entries(this.data)) {
+            this.bindableAttributes.forEach((attr) => {
+                let o = $(`*[${attr}='${stripScript(k)}']`);
+                if (typeof o !== 'undefined') {
+                    FormUtils.setValue(o, v);
+                }
+            }); 
         }
     }
     GetFormVals() {
@@ -84,12 +91,13 @@ export class DataBinder {
                 return;
             }
             const nodeName = new RegExp(/INPUT|TEXTAREA|SELECT|DATALIST/, 'gi');
-            if (nodeName.test($(o).prop('nodeName'))) {
-                const pmap = $(o).attr('data-pmap');
-                const id = (typeof pmap !== 'undefined') ? pmap : $(o).attr('name'); 
-                if (typeof id !== 'undefined') {
-                    d[id] = FormUtils.getValue(o);
-                } 
+            if (nodeName.test($(o).prop('nodeName'))) { 
+                this.bindableAttributes.forEach((attr) => {
+                    let bindto = $(o).attr(attr);
+                    if (typeof bindto !== 'undefined') {
+                        d[bindto] = FormUtils.getValue(o);
+                    }
+                }); 
             } 
         }); 
         return d;
