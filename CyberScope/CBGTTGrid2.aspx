@@ -11,37 +11,31 @@
         </asp:BulletedList>
  
  
-  <CB:CBDataGrid ID="MainGrid" StoredProcedureCommands="Export, Update, Delete"   
-        StoredProcedure="GTT_CRUD" runat="server" >
-         <%--    --%> 
+  <CB:CBDataGrid ID="MainGrid" StoredProcedureCommands="SELECT, PerformInsert, Update, DeleteAll"   
+        StoredProcedure="TIC_CloudServices_CRUD" runat="server" >
+         <%--    
           <SelectParams>
               <CB:GridSqlParam ParamName="PK_QuestionGroup"  ParamValue="3210" />
           </SelectParams>
-       
-         <MasterTableView EditMode="InPlace"  
-             DataKeyNames="PK_OrgSubmission, PK_Question, PK_fsma_GTT"  
-             CommandItemDisplay="None">  
+         --%>  
+         <MasterTableView EditMode="InPlace"
+             DataKeyNames="PK_OrgSubmission, PK_CloudServices"  
+            CommandItemDisplay="Top">
+            <CommandItemTemplate> 
+                <telerik:RadButton ID="AddNewRecordButton" runat="server" CommandName="InitInsert" Text="Add New Row" ToolTip="Add New Row" />
+                &nbsp;&nbsp;&nbsp;
+                <telerik:RadButton ID="DeleteButton" runat="server" CommandName="DeleteAll" Text="Clear All" ToolTip="Clear All" AutoPostBack="false" onclientclicked="OnClientClickedCloud" ValidationGroup="vgClearCloud"/>
+                &nbsp;&nbsp;&nbsp; 
+                <asp:CheckBox ID="chkboxNACloud" runat="server" Text="No Services to Report"  AutoPostBack="False" onclick="javascript:TestConfirmCloud(this)" />
+            </CommandItemTemplate>
             <Columns>
-                <telerik:GridEditCommandColumn UniqueName="EditCol"></telerik:GridEditCommandColumn> 
-                <telerik:GridBoundColumn ReadOnly="true" HeaderText="Type of Test" DataField="CAPTION"></telerik:GridBoundColumn>
-                  <telerik:GridTemplateColumn HeaderText="Total count of systems (from 1.1.1 and 1.1.2) that received this form of testing (Numeric)" UniqueName="SystemCount">
+                <telerik:GridEditCommandColumn UniqueName="EditCol"></telerik:GridEditCommandColumn>  
+                <telerik:GridTemplateColumn HeaderText="ProviderName" UniqueName="ProviderName">
                 <EditItemTemplate> 
-                    <telerik:RadNumericTextBox ID="SystemCount" runat="server" AutoCompleteType="Disabled" > 
-                        <NumberFormat DecimalDigits="0" />
-                    </telerik:RadNumericTextBox>
+                    <asp:TextBox ID="ProviderName" runat="server" ></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblSystemCount" runat="server" Text='<%# Bind("SystemCount") %>'></asp:Label>
-                </ItemTemplate>
-                </telerik:GridTemplateColumn> 
-                <telerik:GridTemplateColumn HeaderText="Total count of tests performed (Numeric)" UniqueName="TestsPerformedCount">
-                <EditItemTemplate> 
-                    <telerik:RadNumericTextBox ID="TestsPerformedCount" AutoCompleteType="Disabled" runat="server" > 
-                        <NumberFormat DecimalDigits="0" />
-                    </telerik:RadNumericTextBox>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:Label ID="lblTestsPerformedCount" runat="server" Text='<%# Bind("TestsPerformedCount") %>'></asp:Label>
+                    <asp:Label ID="lblProviderName" runat="server" Text='<%# Bind("ProviderName") %>'></asp:Label>
                 </ItemTemplate>
                 </telerik:GridTemplateColumn>  
              </Columns>

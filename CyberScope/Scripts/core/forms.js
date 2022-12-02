@@ -80,28 +80,28 @@ export class DataBinder {
                 if (typeof o !== 'undefined') {
                     FormUtils.setValue(o, v);
                 }
-            }); 
+            });
         }
     }
     GetFormVals() {
         let d = {};
-        $(`${this.container} *`).each((i, o) => { 
+        $(`${this.container} *`).each((i, o) => {
             const type = new RegExp(/hidden|button|submit/, 'gi');
             if (type.test($(o).prop('type'))) {
                 return;
             }
             const nodeName = new RegExp(/INPUT|TEXTAREA|SELECT|DATALIST/, 'gi');
-            if (nodeName.test($(o).prop('nodeName'))) { 
+            if (nodeName.test($(o).prop('nodeName'))) {
                 this.bindableAttributes.forEach((attr) => {
                     let bindto = $(o).attr(attr);
                     if (typeof bindto !== 'undefined') {
                         d[bindto] = FormUtils.getValue(o);
                     }
-                }); 
-            } 
-        }); 
+                });
+            }
+        });
         return d;
-    }  
+    }
 }
 
 export class FormUtils {
@@ -143,4 +143,28 @@ export class FormUtils {
         }
         $(o).val(val);
     }
+}
+
+export const indentQuestions = ({ how={ '[a-z]$': 1 } } = {}) => {
+
+    const span = parseInt($('.SectionHead').attr('colspan'));
+    $('.ButtonDiv, .col_error').attr('colspan', span);
+
+    $('tr[id^="r-m-"] > td').css({ 'width': '1%' });
+    $('tr[id^="r-m-"] td.Question').css({ 'width': '99%' });
+    $('tr[id^="r-m-"]').each((index, element) => {
+        for (let [k, v] of Object.entries(how)) {
+            if (RegExp(k).test($(element).prop('id'))) { 
+                for (var i = 0; i < v; i++) {
+                    $('<td class="LabelColumn"></td>').insertBefore($(element).find("td:first-child"));
+                }
+            };
+        }
+    });
+    $('tr[id^="r-m-"]').each((index, element) => {
+        let cols = $(element).find(" > td");
+        if (cols.length < span) {
+            $(element).find('.Question').attr('colspan', (span + 1) - cols.length);
+        }
+    });
 }

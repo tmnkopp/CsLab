@@ -166,23 +166,26 @@ export default class DependancyResolver {
             eles = eles.find('span');
         }
         if (eles.length > 0) { 
-            let isMULTI = row_elm.attr('class').indexOf('ct_MULTICHECKBOX') > -1;
-            let isPICK = row_elm.attr('class').indexOf('ct_PICK') > -1;
-            let isYN = row_elm.attr('class').indexOf('ct_YN') > -1;
-     
+             
             let elemval = eles[0].innerHTML.trim();
-            //console.log(elemval);
-
-            if (isMULTI || isPICK) {
-                let selectedValues = elemval.split('<br>');
-                let defaultValues = elemval.split(' / '); 
-                if (defaultValues.length > 1 && selectedValues.length < 2) {
-                    return '~no_selection~';
+         
+            if (row_elm[0].hasAttribute('class')) {
+                let isMULTI = row_elm.attr('class').indexOf('ct_MULTICHECKBOX') > -1;
+                let isPICK = row_elm.attr('class').indexOf('ct_PICK') > -1;
+                let isYN = row_elm.attr('class').indexOf('ct_YN') > -1;
+                if (isMULTI || isPICK) {
+                    let selectedValues = elemval.split('<br>');
+                    let defaultValues = elemval.split(' / ');
+                    if (defaultValues.length > 1 && selectedValues.length < 2) {
+                        return '~no_selection~';
+                    }
+                    elemval = elemval.split('<br>').join(',');
+                    elemval = `,${elemval}`;
+                    return elemval;
                 }
-                elemval = elemval.split('<br>').join(',');
-                elemval = `,${elemval}`;
-                return elemval;
-            } 
+            }
+            //console.log(elemval);
+             
             return elemval;
         } else {
             return null;

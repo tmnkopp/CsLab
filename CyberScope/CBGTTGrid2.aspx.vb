@@ -12,11 +12,11 @@ Public Class _CBGTTGrid2
     Dim oDB As New DataBaseUtils2
 
     Protected Sub Page_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
-        MainGrid.PK_OrgSubmission = "28736"
+        MainGrid.PK_OrgSubmission = "30501"
     End Sub
     Protected Sub MainGrid_Selecting(ByVal sender As Object, ByVal e As SelectingEventArgs) Handles MainGrid.OnSelecting
-        MainGrid.AddSqlParam(e.cmd, "@PK_QuestionGroup", "3210")
-        ' e.cmd.Parameters.AddWithValue("@PK_QuestionGroup", "3210")
+        'MainGrid.AddSqlParam(e.cmd, "@PK_QuestionGroup", "3210")
+        'e.cmd.Parameters.AddWithValue("@PK_QuestionGroup", "3210")
     End Sub
 
 
